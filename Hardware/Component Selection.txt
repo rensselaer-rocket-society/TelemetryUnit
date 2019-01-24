@@ -1,0 +1,20 @@
+Venus638FLPx-L GPS Module with external antenna
+	https://www.sparkfun.com/products/10919
+	https://www.mouser.com/ProductDetail/SparkFun/GPS-10919?qs=%2fha2pyFadujYIbRwdoWeW8iiDT7lKdstXDSb%252bi3ojdxpWwYqtJeKHA%3d%3d
+
+Teseo-LIV3F GPS Module - CHEAPER ~$15
+	https://www.mouser.com/ProductDetail/STMicroelectronics/TESEO-LIV3F?qs=sGAEpiMZZMsjLMBIknjmkgt2yq%252bxn050w8LJiYmkdB1dnhxMglZf0A%3d%3d
+	https://www.digikey.com/product-detail/en/stmicroelectronics/TESEO-LIV3F/497-18163-1-ND/9556693
+
+ATmega1281 @ 10MHz 3.3V
+
+MPL3115A2 Barometer/Altimeter + Temp Sensor
+	https://www.mouser.com/ProductDetail/NXP-Freescale/MPL3115A2?qs=sGAEpiMZZMu5STvjs3TtKqOY2b8Izg8b
+
+
+SD Card for onboard logging?
+
+Xbee Socket (additional FTDI/ICSP interface board connects here also)
+
+BNO055 Integrated 9DOF IMU
+https://www.mouser.com/ProductDetail/Bosch-Sensortec/BNO055?qs=sGAEpiMZZMtIHXa%252bTo%2fr2SMZuH5v3473jYOqmUidcJg%3d
