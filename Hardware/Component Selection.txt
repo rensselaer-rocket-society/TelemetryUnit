@@ -1,32 +1,27 @@
+MAIN BOARD:
+
 Antennova M20048 GPS Module - 627-1099-1-ND
-	https://www.digikey.com/product-detail/en/antenova/M20048-1/627-1099-1-ND/7931498
 Tuning Inductor (same series as recommended, 0603 instead of 0402 for solderability) - 490-16639-1-ND
 
 ATmega1281 @ 10MHz 3.3V - ATMEGA1281-16AURTR-ND
-	https://www.digikey.com/product-detail/en/microchip-technology/ATMEGA1281-16AUR/ATMEGA1281-16AURTR-ND/2050750
-
 Crystal 10MHz - XC2078CT-ND
+Reset Button - PTS 647 SM38 SMTR2 LFS
 
 MPL3115A2 Barometer/Altimeter + Temp Sensor - MPL3115A2-ND
-	https://www.mouser.com/ProductDetail/NXP-Freescale/MPL3115A2?qs=sGAEpiMZZMu5STvjs3TtKqOY2b8Izg8b
-	https://www.digikey.com/product-detail/en/nxp-usa-inc/MPL3115A2/MPL3115A2-ND/2817529
-
-Reset Button - PTS 647 SM38 SMTR2 LFS
-	https://www.digikey.com/product-detail/en/c-k/PTS-647-SM38-SMTR2-LFS/PTS647SM38SMTR2LFSCT-ND/9649870
-
-microSD Housing - 114-00841-68-1-ND? Do we want push-push type for better retention? Do we care?
-	https://www.digikey.com/product-detail/en/amphenol-icc-fci/114-00841-68-1-ND
 
 Xbee Socket (additional FTDI/ICSP interface board connects here also) - S5751-10-ND (x2)
-	https://www.digikey.com/product-detail/en/sullins-connector-solutions/NPPN101BFCN-RC/S5751-10-ND/804812
+
+microSD Housing - 114-00841-68-1-ND? Do we want push-push type for better retention? Do we care?
 
 IMU - Accel + Gyro $3 - 497-16367-1-ND  		14-LGA 0.5mm pitch
-IMU - Accel + Gyro $7.68 - 1428-1061-1-ND Low Stock	24-QFN 0.4mm pitch (side conductor exposed... by 0.15mm)
-IMU - Accel + Gyro + Magneto $8.04 - 1428-1123-1-ND	24-QFN 0.4mm pitch (side conductor exposed... by 0.15mm)
+IMU - Accel + Gyro + Magneto $6.33 - 497-14946-1-ND	24-LGA 0.5mm pitch
+IMU - Accel + Gyro + Magneto $7.99 - 828-1060-1-ND	20-LGA 0.5mm pitch
+//IMU - Accel + Gyro $7.68 - 1428-1061-1-ND Low Stock	24-QFN 0.4mm pitch (side conductor exposed... by 0.15mm) 
+IMU - Accel + Gyro + Magneto $8.04 - 1428-1123-1-ND	24-QFN 0.4mm pitch (side conductor exposed... by 0.15mm) No 3.3V VDDIO :(
 
 Switching Regulator - AP65111AWU-7DICT-ND
 Power Inductor - 587-5829-1-ND
 Big Caps (Ceramic 0805) - 1276-6780-1-ND
 Prog Power Diode - 1655-1504-1-ND
-
-Indicator LED - 732-4978-1-ND (WL-SMCW series)
+Battery Terminal Block - A98333-ND
+Indicator LED - 732-4978-1-ND (WL-SMCW series, can choose color)
