@@ -13,11 +13,7 @@ Xbee Socket (additional FTDI/ICSP interface board connects here also) - S5751-10
 
 microSD Housing - 114-00841-68-1-ND? Do we want push-push type for better retention? Do we care?
 
-IMU - Accel + Gyro $3 - 497-16367-1-ND  		14-LGA 0.5mm pitch
-IMU - Accel + Gyro + Magneto $6.33 - 497-14946-1-ND	24-LGA 0.5mm pitch
-IMU - Accel + Gyro + Magneto $7.99 - 828-1060-1-ND	20-LGA 0.5mm pitch
-//IMU - Accel + Gyro $7.68 - 1428-1061-1-ND Low Stock	24-QFN 0.4mm pitch (side conductor exposed... by 0.15mm) 
-IMU - Accel + Gyro + Magneto $8.04 - 1428-1123-1-ND	24-QFN 0.4mm pitch (side conductor exposed... by 0.15mm) No 3.3V VDDIO :(
+IMU - Accel + Gyro $3 - 497-15383-1-ND 		14-LGA 0.5mm pitch
 
 Switching Regulator - AP65111AWU-7DICT-ND
 Power Inductor - 587-5829-1-ND

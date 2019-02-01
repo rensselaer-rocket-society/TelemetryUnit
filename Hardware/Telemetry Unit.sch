@@ -15402,15 +15402,6 @@ battery monitoring up to 10.24V</text>
 <label x="-5.08" y="35.56" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="!RST" class="0">
-<segment>
-<label x="15.24" y="116.84" size="1.778" layer="95"/>
-<pinref part="S1" gate="G$1" pin="1@B"/>
-<pinref part="R1" gate="G$1" pin="2"/>
-<wire x1="22.86" y1="119.38" x2="22.86" y2="116.84" width="0.1524" layer="91"/>
-<wire x1="22.86" y1="116.84" x2="15.24" y2="114.3" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="FIX" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="(IC1)PD4"/>
@@ -15451,12 +15442,13 @@ battery monitoring up to 10.24V</text>
 <wire x1="12.7" y1="20.32" x2="7.62" y2="20.32" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$11" class="0">
+<net name="!RST" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="RESET"/>
 <pinref part="S1" gate="G$1" pin="1@A"/>
 <wire x1="15.24" y1="116.84" x2="22.86" y2="114.3" width="0.1524" layer="91"/>
 <wire x1="22.86" y1="114.3" x2="25.4" y2="114.3" width="0.1524" layer="91"/>
+<label x="15.24" y="116.84" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="ACCEL_INT" class="0">
@@ -15464,6 +15456,14 @@ battery monitoring up to 10.24V</text>
 <pinref part="IC1" gate="G$1" pin="(OC3B/INT4)PE4"/>
 <wire x1="78.74" y1="15.24" x2="96.52" y2="15.24" width="0.1524" layer="91"/>
 <label x="93.98" y="15.24" size="1.778" layer="95" align="bottom-right"/>
+</segment>
+</net>
+<net name="RST2" class="0">
+<segment>
+<pinref part="S1" gate="G$1" pin="1@B"/>
+<pinref part="R1" gate="G$1" pin="2"/>
+<wire x1="22.86" y1="119.38" x2="22.86" y2="116.84" width="0.1524" layer="91"/>
+<wire x1="22.86" y1="116.84" x2="15.24" y2="114.3" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
