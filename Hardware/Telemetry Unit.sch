@@ -23827,8 +23827,8 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <part name="C14" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="100nF"/>
 <part name="R12" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2" value="1k"/>
 <part name="R13" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2" value="1k"/>
-<part name="LED1" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="CHIP-LED0603" package3d_urn="urn:adsk.eagle:package:15819/3"/>
-<part name="LED2" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="CHIP-LED0603" package3d_urn="urn:adsk.eagle:package:15819/3"/>
+<part name="RX" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="CHIP-LED0603" package3d_urn="urn:adsk.eagle:package:15819/3"/>
+<part name="TX" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="CHIP-LED0603" package3d_urn="urn:adsk.eagle:package:15819/3"/>
 <part name="P+3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="P+4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="R14" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2" value="10k"/>
@@ -23836,6 +23836,9 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <part name="JP1" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-2X3" device="" package3d_urn="urn:adsk.eagle:package:22462/2"/>
 <part name="GND19" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="P+5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
+<part name="C15" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-US" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="2.2u"/>
+<part name="R15" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k"/>
+<part name="R16" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k"/>
 </parts>
 <sheets>
 <sheet>
@@ -24011,6 +24014,10 @@ battery monitoring up to 10.24V</text>
 <wire x1="-2.54" y1="114.3" x2="-2.54" y2="109.22" width="0.1524" layer="91"/>
 <pinref part="GND7" gate="1" pin="GND"/>
 <pinref part="S1" gate="G$1" pin="0@B"/>
+<pinref part="S1" gate="G$1" pin="0@A"/>
+<wire x1="2.54" y1="116.84" x2="-2.54" y2="116.84" width="0.1524" layer="91"/>
+<wire x1="-2.54" y1="116.84" x2="-2.54" y2="114.3" width="0.1524" layer="91"/>
+<junction x="-2.54" y="114.3"/>
 </segment>
 <segment>
 <pinref part="GND10" gate="1" pin="GND"/>
@@ -24381,6 +24388,11 @@ battery monitoring up to 10.24V</text>
 <wire x1="71.12" y1="50.8" x2="73.66" y2="50.8" width="0.1524" layer="91"/>
 <pinref part="GND1" gate="1" pin="GND"/>
 <wire x1="73.66" y1="50.8" x2="73.66" y2="48.26" width="0.1524" layer="91"/>
+<pinref part="GPS1" gate="G$1" pin="AT1"/>
+<wire x1="45.72" y1="53.34" x2="45.72" y2="55.88" width="0.1524" layer="91"/>
+<wire x1="45.72" y1="55.88" x2="73.66" y2="55.88" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="55.88" x2="73.66" y2="50.8" width="0.1524" layer="91"/>
+<junction x="73.66" y="50.8"/>
 </segment>
 <segment>
 <pinref part="FIX" gate="G$1" pin="C"/>
@@ -24627,8 +24639,8 @@ battery monitoring up to 10.24V</text>
 <attribute name="VALUE" x="-33.02" y="22.86" size="1.778" layer="96"/>
 </instance>
 <instance part="C14" gate="G$1" x="25.4" y="66.04" smashed="yes" rot="R90">
-<attribute name="NAME" x="25.019" y="67.564" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="30.099" y="67.564" size="1.778" layer="96" rot="R90"/>
+<attribute name="NAME" x="23.876" y="65.659" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="26.416" y="63.119" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="R12" gate="G$1" x="20.32" y="43.18" smashed="yes" rot="R90">
 <attribute name="NAME" x="18.8214" y="39.37" size="1.778" layer="95" rot="R90"/>
@@ -24638,11 +24650,11 @@ battery monitoring up to 10.24V</text>
 <attribute name="NAME" x="28.9814" y="39.37" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="33.782" y="39.37" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="LED1" gate="G$1" x="20.32" y="33.02" smashed="yes" rot="R180">
+<instance part="RX" gate="G$1" x="20.32" y="33.02" smashed="yes" rot="R180">
 <attribute name="NAME" x="16.764" y="37.592" size="1.778" layer="95" rot="R270"/>
 <attribute name="VALUE" x="14.605" y="37.592" size="1.778" layer="96" rot="R270"/>
 </instance>
-<instance part="LED2" gate="G$1" x="30.48" y="33.02" smashed="yes" rot="R180">
+<instance part="TX" gate="G$1" x="30.48" y="33.02" smashed="yes" rot="R180">
 <attribute name="NAME" x="26.924" y="37.592" size="1.778" layer="95" rot="R270"/>
 <attribute name="VALUE" x="24.765" y="37.592" size="1.778" layer="96" rot="R270"/>
 </instance>
@@ -24664,6 +24676,18 @@ battery monitoring up to 10.24V</text>
 </instance>
 <instance part="P+5" gate="G$1" x="-55.88" y="43.18" smashed="yes">
 <attribute name="VALUE" x="-58.42" y="40.64" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="C15" gate="G$1" x="-35.56" y="71.12" smashed="yes">
+<attribute name="NAME" x="-34.544" y="71.755" size="1.778" layer="95"/>
+<attribute name="VALUE" x="-34.544" y="66.929" size="1.778" layer="96"/>
+</instance>
+<instance part="R15" gate="G$1" x="20.32" y="76.2" smashed="yes">
+<attribute name="NAME" x="16.51" y="77.6986" size="1.778" layer="95"/>
+<attribute name="VALUE" x="21.59" y="77.978" size="1.778" layer="96"/>
+</instance>
+<instance part="R16" gate="G$1" x="20.32" y="73.66" smashed="yes">
+<attribute name="NAME" x="16.51" y="70.0786" size="1.778" layer="95"/>
+<attribute name="VALUE" x="21.59" y="70.358" size="1.778" layer="96"/>
 </instance>
 </instances>
 <busses>
@@ -24689,12 +24713,16 @@ battery monitoring up to 10.24V</text>
 <segment>
 <pinref part="IC2" gate="1" pin="!RESET"/>
 <wire x1="-22.86" y1="68.58" x2="-30.48" y2="68.58" width="0.1524" layer="91"/>
-<wire x1="-30.48" y1="68.58" x2="-30.48" y2="35.56" width="0.1524" layer="91"/>
+<wire x1="-30.48" y1="68.58" x2="-30.48" y2="66.04" width="0.1524" layer="91"/>
 <pinref part="GND17" gate="1" pin="GND"/>
 <pinref part="IC2" gate="1" pin="GND@A"/>
+<wire x1="-30.48" y1="66.04" x2="-30.48" y2="35.56" width="0.1524" layer="91"/>
 <wire x1="-30.48" y1="35.56" x2="-30.48" y2="27.94" width="0.1524" layer="91"/>
 <wire x1="-22.86" y1="35.56" x2="-30.48" y2="35.56" width="0.1524" layer="91"/>
 <junction x="-30.48" y="35.56"/>
+<pinref part="C15" gate="G$1" pin="2"/>
+<wire x1="-35.56" y1="66.04" x2="-30.48" y2="66.04" width="0.1524" layer="91"/>
+<junction x="-30.48" y="66.04"/>
 </segment>
 <segment>
 <pinref part="IC2" gate="1" pin="TEST"/>
@@ -24728,9 +24756,9 @@ battery monitoring up to 10.24V</text>
 <label x="58.42" y="66.04" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC2" gate="1" pin="RXD"/>
-<wire x1="5.08" y1="73.66" x2="15.24" y2="73.66" width="0.1524" layer="91"/>
-<label x="12.7" y="73.66" size="1.778" layer="95" align="bottom-right"/>
+<pinref part="R16" gate="G$1" pin="2"/>
+<wire x1="25.4" y1="73.66" x2="35.56" y2="73.66" width="0.1524" layer="91"/>
+<label x="33.02" y="73.66" size="1.778" layer="95" align="bottom-right"/>
 </segment>
 </net>
 <net name="RX0" class="0">
@@ -24740,21 +24768,9 @@ battery monitoring up to 10.24V</text>
 <label x="58.42" y="63.5" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC2" gate="1" pin="TXD"/>
-<wire x1="5.08" y1="76.2" x2="15.24" y2="76.2" width="0.1524" layer="91"/>
-<label x="12.7" y="76.2" size="1.778" layer="95" align="bottom-right"/>
-</segment>
-</net>
-<net name="!RST" class="0">
-<segment>
-<pinref part="C14" gate="G$1" pin="2"/>
-<wire x1="30.48" y1="66.04" x2="35.56" y2="66.04" width="0.1524" layer="91"/>
-<label x="33.02" y="66.04" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="JP1" gate="A" pin="5"/>
-<wire x1="-78.74" y1="27.94" x2="-93.98" y2="27.94" width="0.1524" layer="91"/>
-<label x="-91.44" y="27.94" size="1.778" layer="95"/>
+<pinref part="R15" gate="G$1" pin="2"/>
+<wire x1="25.4" y1="76.2" x2="35.56" y2="76.2" width="0.1524" layer="91"/>
+<label x="33.02" y="76.2" size="1.778" layer="95" align="bottom-right"/>
 </segment>
 </net>
 <net name="RF_SLP" class="0">
@@ -24799,13 +24815,13 @@ battery monitoring up to 10.24V</text>
 <net name="N$15" class="0">
 <segment>
 <pinref part="R12" gate="G$1" pin="1"/>
-<pinref part="LED1" gate="G$1" pin="C"/>
+<pinref part="RX" gate="G$1" pin="C"/>
 </segment>
 </net>
 <net name="N$17" class="0">
 <segment>
 <pinref part="R13" gate="G$1" pin="1"/>
-<pinref part="LED2" gate="G$1" pin="C"/>
+<pinref part="TX" gate="G$1" pin="C"/>
 </segment>
 </net>
 <net name="N$18" class="0">
@@ -24844,15 +24860,18 @@ battery monitoring up to 10.24V</text>
 <wire x1="-22.86" y1="73.66" x2="-30.48" y2="73.66" width="0.1524" layer="91"/>
 <wire x1="-30.48" y1="73.66" x2="-30.48" y2="76.2" width="0.1524" layer="91"/>
 <junction x="-30.48" y="76.2"/>
+<pinref part="C15" gate="G$1" pin="1"/>
+<wire x1="-35.56" y1="73.66" x2="-30.48" y2="73.66" width="0.1524" layer="91"/>
+<junction x="-30.48" y="73.66"/>
 </segment>
 <segment>
 <pinref part="P+3" gate="G$1" pin="+3V3"/>
-<pinref part="LED1" gate="G$1" pin="A"/>
+<pinref part="RX" gate="G$1" pin="A"/>
 <wire x1="20.32" y1="25.4" x2="20.32" y2="30.48" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="P+4" gate="G$1" pin="+3V3"/>
-<pinref part="LED2" gate="G$1" pin="A"/>
+<pinref part="TX" gate="G$1" pin="A"/>
 <wire x1="30.48" y1="25.4" x2="30.48" y2="30.48" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -24881,6 +24900,32 @@ battery monitoring up to 10.24V</text>
 <pinref part="JP1" gate="A" pin="4"/>
 <wire x1="-71.12" y1="30.48" x2="-55.88" y2="30.48" width="0.1524" layer="91"/>
 <label x="-58.42" y="30.48" size="1.778" layer="95" align="bottom-right"/>
+</segment>
+</net>
+<net name="RST2" class="0">
+<segment>
+<pinref part="C14" gate="G$1" pin="2"/>
+<wire x1="30.48" y1="66.04" x2="35.56" y2="66.04" width="0.1524" layer="91"/>
+<label x="33.02" y="66.04" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="JP1" gate="A" pin="5"/>
+<wire x1="-78.74" y1="27.94" x2="-93.98" y2="27.94" width="0.1524" layer="91"/>
+<label x="-91.44" y="27.94" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$20" class="0">
+<segment>
+<pinref part="R15" gate="G$1" pin="1"/>
+<pinref part="IC2" gate="1" pin="TXD"/>
+<wire x1="15.24" y1="76.2" x2="5.08" y2="76.2" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$21" class="0">
+<segment>
+<pinref part="IC2" gate="1" pin="RXD"/>
+<pinref part="R16" gate="G$1" pin="1"/>
+<wire x1="5.08" y1="73.66" x2="15.24" y2="73.66" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
@@ -25096,6 +25141,7 @@ battery monitoring up to 10.24V</text>
 </sheet>
 </sheets>
 <errors>
+<approved hash="104,4,73.66,81.28,XB1,VCC,+3V3,,,"/>
 <approved hash="202,4,73.66,30.48,XB1,VREF,,,,"/>
 <approved hash="202,1,25.4,7.62,IC1,PF1(ADC1),,,,"/>
 <approved hash="202,1,25.4,10.16,IC1,PF2(ADC2),,,,"/>
@@ -25108,10 +25154,23 @@ battery monitoring up to 10.24V</text>
 <approved hash="104,1,25.4,88.9,IC1,VCC,+3V3,,,"/>
 <approved hash="104,1,25.4,86.36,IC1,VCC,+3V3,,,"/>
 <approved hash="202,1,25.4,58.42,IC1,PEN,,,,"/>
+<approved hash="104,1,152.4,104.14,J2,VDD,+3V3,,,"/>
+<approved hash="104,1,152.4,99.06,J2,VSS,GND,,,"/>
+<approved hash="104,4,-22.86,76.2,IC2,VCC,+3V3,,,"/>
+<approved hash="202,4,-22.86,63.5,IC2,OSCI,,,,"/>
+<approved hash="202,4,5.08,68.58,IC2,!CTS,,,,"/>
+<approved hash="202,4,5.08,63.5,IC2,!DSR,,,,"/>
+<approved hash="202,4,5.08,60.96,IC2,!DCD,,,,"/>
+<approved hash="202,4,5.08,58.42,IC2,!RI,,,,"/>
+<approved hash="104,4,-22.86,73.66,IC2,VCCIO,+3V3,,,"/>
 <approved hash="113,2,71.4417,19.05,FIX,,,,,"/>
 <approved hash="113,5,84.1417,6.35,PWR,,,,,"/>
 <approved hash="113,5,-55.88,31.0617,D1,,,,,"/>
 <approved hash="113,5,-56.1171,18.0061,J1,,,,,"/>
+<approved hash="113,4,19.9983,34.29,RX,,,,,"/>
+<approved hash="113,4,30.1583,34.29,TX,,,,,"/>
+<approved hash="113,4,-74.9723,31.9761,JP1,,,,,"/>
+<approved hash="115,1,22.86,118.11,RST2,,,,,"/>
 </errors>
 </schematic>
 </drawing>
