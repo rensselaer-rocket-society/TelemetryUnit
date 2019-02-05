@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.2.2">
+<eagle version="9.3.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -23576,6 +23576,59 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="MF-MSMF050-2">
+<packages>
+<package name="FUSM1812X02">
+<wire x1="-1.4732" y1="1.6002" x2="1.4732" y2="1.6002" width="0.1016" layer="51"/>
+<wire x1="-1.4478" y1="-1.6002" x2="1.4732" y2="-1.6002" width="0.1016" layer="51"/>
+<text x="-1.90605" y="2.541390625" size="1.2707" layer="25">&gt;NAME</text>
+<text x="-1.90841875" y="-3.81685" size="1.27228125" layer="27">&gt;VALUE</text>
+<rectangle x1="-2.38973125" y1="-1.65246875" x2="-1.4376" y2="1.649" layer="51"/>
+<rectangle x1="1.44976875" y1="-1.65325" x2="2.3978" y2="1.649" layer="51"/>
+<smd name="1" x="-1.95" y="0" dx="1.9" dy="3.4" layer="1"/>
+<smd name="2" x="1.95" y="0" dx="1.9" dy="3.4" layer="1"/>
+</package>
+</packages>
+<symbols>
+<symbol name="MF-MSMF050-2">
+<wire x1="-3.81" y1="-0.762" x2="3.81" y2="-0.762" width="0.254" layer="94"/>
+<wire x1="3.81" y1="0.762" x2="-3.81" y2="0.762" width="0.254" layer="94"/>
+<wire x1="3.81" y1="-0.762" x2="3.81" y2="0.762" width="0.254" layer="94"/>
+<wire x1="-3.81" y1="0.762" x2="-3.81" y2="-0.762" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="0" x2="2.54" y2="0" width="0.1524" layer="94"/>
+<text x="-3.81661875" y="1.39943125" size="1.781090625" layer="95">&gt;NAME</text>
+<text x="-3.816859375" y="-2.926259375" size="1.7812" layer="96">&gt;VALUE</text>
+<pin name="2" x="5.08" y="0" visible="off" length="short" direction="pas" swaplevel="1" rot="R180"/>
+<pin name="1" x="-5.08" y="0" visible="off" length="short" direction="pas" swaplevel="1"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="MF-MSMF050-2" prefix="F">
+<description>PTC Resettable Fuse 0.5A(hold) 1A(trip) 15V 100A 0.8W 0.15s 0.15Ohm SMD Solder Pad 1812 T/R</description>
+<gates>
+<gate name="G$1" symbol="MF-MSMF050-2" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="FUSM1812X02">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="AVAILABILITY" value="Unavailable"/>
+<attribute name="DESCRIPTION" value=" PTC Resettable Fuse 0.5A_hold_ 1A_trip_ 15V 100A 0.8W 0.15s 0.15Ohm SMD Solder Pad 1812 T/R "/>
+<attribute name="MF" value="Bourns"/>
+<attribute name="MP" value="MF-MSMF050-2"/>
+<attribute name="PACKAGE" value="1812 Bourns"/>
+<attribute name="PRICE" value="None"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -23670,6 +23723,7 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <part name="C15" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-US" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="2.2u"/>
 <part name="R15" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k"/>
 <part name="R16" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k"/>
+<part name="F1" library="MF-MSMF050-2" deviceset="MF-MSMF050-2" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -24520,6 +24574,10 @@ battery monitoring up to 10.24V</text>
 <attribute name="NAME" x="16.51" y="70.0786" size="1.778" layer="95"/>
 <attribute name="VALUE" x="21.59" y="70.358" size="1.778" layer="96"/>
 </instance>
+<instance part="F1" gate="G$1" x="-55.88" y="50.8" smashed="yes">
+<attribute name="NAME" x="-59.69661875" y="52.19943125" size="1.781090625" layer="95"/>
+<attribute name="VALUE" x="-59.696859375" y="47.873740625" size="1.7812" layer="96"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -24609,13 +24667,6 @@ battery monitoring up to 10.24V</text>
 <pinref part="XB1" gate="G$1" pin="!DTR!/SLEEP_RQ/DI8"/>
 <wire x1="73.66" y1="55.88" x2="55.88" y2="55.88" width="0.1524" layer="91"/>
 <label x="58.42" y="55.88" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="V_USB" class="0">
-<segment>
-<pinref part="J3" gate="G$1" pin="VUSB"/>
-<wire x1="-63.5" y1="50.8" x2="-50.8" y2="50.8" width="0.1524" layer="91"/>
-<label x="-53.34" y="50.8" size="1.778" layer="95" align="bottom-right"/>
 </segment>
 </net>
 <net name="N$11" class="0">
@@ -24757,6 +24808,20 @@ battery monitoring up to 10.24V</text>
 <pinref part="IC2" gate="1" pin="RXD"/>
 <pinref part="R16" gate="G$1" pin="1"/>
 <wire x1="5.08" y1="73.66" x2="15.24" y2="73.66" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$22" class="0">
+<segment>
+<pinref part="J3" gate="G$1" pin="VUSB"/>
+<pinref part="F1" gate="G$1" pin="1"/>
+<wire x1="-63.5" y1="50.8" x2="-60.96" y2="50.8" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="V_USB" class="0">
+<segment>
+<pinref part="F1" gate="G$1" pin="2"/>
+<wire x1="-50.8" y1="50.8" x2="-45.72" y2="50.8" width="0.1524" layer="91"/>
+<label x="-48.26" y="50.8" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
