@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_socketio import SocketIO
 
-from TelemetryDecoder import DecoderThread
+from PacketDecoder import DecoderThread
 
 app = Flask(__name__,
 			static_url_path='', 
