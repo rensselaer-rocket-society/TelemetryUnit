@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Open MCT</title>
+    <script src="openmct/openmct.js"></script>
+</head>
+<body>
+    <script>
+        openmct.setAssetPath('openmct');
+        openmct.install(openmct.plugins.LocalStorage());
+        openmct.install(openmct.plugins.MyItems());
+        openmct.install(openmct.plugins.UTCTimeSystem());
+        openmct.install(openmct.plugins.Espresso());
+        openmct.start();
+    </script>
+</body>
+</html>
