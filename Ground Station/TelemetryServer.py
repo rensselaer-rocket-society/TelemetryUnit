@@ -19,4 +19,4 @@ if __name__ == '__main__':
 	decoder = DecoderThread(socketio)
 	decoder.start()
 
-	socketio.run(app, debug=True, port=8000)
+	socketio.run(app, port=8000)

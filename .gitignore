@@ -1,4 +1,5 @@
 *.pyc
+Ground Station/__pycache__
 
 # Ignore list for Eagle, a PCB layout tool
 
