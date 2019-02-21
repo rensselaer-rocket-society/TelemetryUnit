@@ -1,3 +1,5 @@
+#include <TinyGPS++.h>
+
 void TimerInit() {
   ASSR &= ~0x20; // Use IO Clock
   
@@ -7,11 +9,18 @@ void TimerInit() {
   TIMSK2 = 0x01; // Only Overflow Interrupts
 }
 
+void USART1Init() { // Manually configure USART1 so we can use interrupts to feed TinyGPS
+  UBRR1 = 64; // Set baud rate to 9600 ((10MHz/(16*9600Hz)-1 ~= 64)
+  UCSR1B = 0x90; // Enable reciever w/ interrupts only for now, we currently don't send commands to GPS
+  // Other initial values are okay (8-bit 1-stop no parity)
+}
+
 bool gps_flag, accel_flag, alt_flag;
+TinyGPSPlus gps;
 
 ISR(TIMER2_OVF_vect) { // Runs every 6.5536 ms
 
-  static byte gps_counter=0;
+  static byte gps_counter=0; //Might be unecessary, could use TinyGPS isUpdated() on relevant streams
   if(++gps_counter >= 153){ // Set every 1.0027 s
     gps_flag=1;
     gps_counter=0;
@@ -30,10 +39,23 @@ ISR(TIMER2_OVF_vect) { // Runs every 6.5536 ms
   }
 }
 
+ISR(USART1_RX_vect) { // Feed GPS UART data to parser
+  char data = UDR1;
+  gps.encode(data);
+  Serial.write(data);
+}
+
 
 void setup() {
   // put your setup code here, to run once:
+  
+  noInterrupts(); //At least UART inititialization said to run with interrupts disabled, we don't really care about interrupts here anyway
+  
   TimerInit();
+  USART1Init();
+  Serial.begin(9600);
+  
+  interrupts();
 }
 
 void loop() {
