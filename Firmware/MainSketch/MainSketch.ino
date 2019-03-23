@@ -1,3 +1,5 @@
+#include "libs/MPL3115A2_Altimeter.h"
+#include "libs/LSM6DS3_IMU.h"
 #include <TinyGPS++.h>
 
 void TimerInit() {
@@ -27,7 +29,7 @@ ISR(TIMER2_OVF_vect) { // Runs every 6.5536 ms
   }
 
   static byte accel_counter=0;
-  if(++accel_counter >= 15){ // Set every 98.304 ms
+  if(++accel_counter >= 2){ // Set every 13.1072 ms (Based on 104Hz rate selection)
     accel_flag=1;
     accel_counter=0;
   }
@@ -54,6 +56,13 @@ void setup() {
   TimerInit();
   USART1Init();
   Serial.begin(9600);
+
+  I2c.timeOut(100);
+  I2c.pullup(false);
+  I2c.begin();
+
+  MPL::Init();
+  LSM::Init();
   
   interrupts();
 }
@@ -65,11 +74,13 @@ void loop() {
     gps_flag=0;
   }
   if(accel_flag){
+    LSM::AccelGyroData dat = LSM::CheckAndRead();
     printf("Accelerometer\r\n");
     accel_flag=0;
   }
   if(alt_flag){
-    printf("Altimeter\r\n");
+    MPL::AltTempData dat = MPL::CheckAndRead();
+    printf("Altimeter:\t%lu\t%u\r\n", dat.alt, dat.temp);
     alt_flag=0;
   }
 }
