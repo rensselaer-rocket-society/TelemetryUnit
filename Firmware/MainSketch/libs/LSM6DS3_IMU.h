@@ -5,7 +5,7 @@
 
 namespace LSM{
 
-	const uint8_t I2C_ADDR = 0xD4; //(Maybe D6)
+	const uint8_t I2C_ADDR = 0x6B; //APPARENTLY I2C Library doesn't want shifted address
 
 	const uint8_t REG_STATUS = 0x1E;
 	const uint8_t REG_OUT_G = 0x22;
@@ -25,7 +25,9 @@ namespace LSM{
 	};
 
 	bool IsDataReady() {
-		return I2c.read(I2C_ADDR, REG_STATUS) & 0x03;//If either data is new
+		uint8_t status;
+		I2c.read(I2C_ADDR, REG_STATUS, 1, &status);
+		return status & 0x03;//If either data is new
 	}
 
 	AccelGyroData ReadData() {
@@ -40,7 +42,7 @@ namespace LSM{
 			return ReadData();
 		} else {
 			AccelGyroData ret;
-			memset(&ret, 0xFF, sizeof(&ret));
+			memset(&ret, 0xFF, sizeof(ret));
 			return ret;
 		}
 	}
@@ -51,6 +53,13 @@ namespace LSM{
 			ready = IsDataReady();
 		} while(!ready);
 		return ReadData();
+	}
+
+	bool CheckDevicePresent() {
+		uint8_t whoami;
+		if(!I2c.read(I2C_ADDR, 0x0F, 1, &whoami)){ 
+			return whoami == 0x69;
+		} else return false;
 	}
 
 	void Init() {

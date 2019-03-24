@@ -5,9 +5,9 @@
 
 namespace MPL{
 
-	const uint8_t I2C_ADDR = 0xC0;
+	const uint8_t I2C_ADDR = 0x60; //APPARENTLY I2C Library doesn't want shifted address
 
-	const uint8_t REG_STATUS = 0x00;
+	const uint8_t REG_STATUS = 0x06;
 	const uint8_t REG_OUT_P = 0x01;
 	const uint8_t REG_OUT_T = 0x04;
 	const uint8_t REG_SYSMOD = 0x11;
@@ -16,8 +16,8 @@ namespace MPL{
 	const uint8_t REG_OFF_H = 0x2D;
 
 	struct AltTempData {
-		unsigned long alt; //In 16ths of a meter
-		unsigned int temp; //In 16ths of a degree Celsius
+		uint32_t alt; //In 16ths of a meter
+		uint16_t temp; //In 16ths of a degree Celsius
 	};
 
 	const uint8_t BASE_CTRL = 0xA8; //Altimeter mode, 32x oversample (130ms/samp)
@@ -25,8 +25,8 @@ namespace MPL{
 
 	AltTempData decode(uint8_t* raw){
 		AltTempData ret;
-		ret.alt = (raw[2]>>4)|(raw[1]<<4)|(raw[0]<<12);
-		ret.temp = (raw[4]>>4)|(raw[3]<<4);
+		ret.alt = ((uint32_t)raw[2]>>4)|((uint32_t)raw[1]<<4)|((uint32_t)raw[0]<<12);
+		ret.temp = ((uint32_t)raw[4]>>4)|((uint32_t)raw[3]<<4);
 		return ret;
 	}
 
@@ -44,26 +44,29 @@ namespace MPL{
 	}
 
 	AltTempData CheckAndRead() {
-		bool ready = I2c.read(I2C_ADDR, REG_STATUS) & 0x08;
-		if(ready){
+		uint8_t status;
+		I2c.read(I2C_ADDR, REG_STATUS, 1, &status);
+		if(status & 0x08){
 			return PresetRead();
 		} else {
 			AltTempData ret;
-			memset(&ret, 0xFF, sizeof(&ret));
+			memset(&ret, 0xFF, sizeof(ret));
 			return ret;
 		}
 	}
 
 	AltTempData BlockingRead() {
-		bool ready;
+		uint8_t status;
 		do{
-			ready = I2c.read(I2C_ADDR, REG_STATUS) & 0x08;
-		} while(!ready);
+			I2c.read(I2C_ADDR, REG_STATUS, 1, &status);
+		} while(!(status & 0x08));
 		return PresetRead();
 	}
 
 	bool IsDataReady() {
-		return I2c.read(I2C_ADDR, REG_STATUS) & 0x08;
+		uint8_t status;
+		I2c.read(I2C_ADDR, REG_STATUS, 1, &status);
+		return status & 0x08;
 	}
 
 	void SetStandby(bool stby) {
@@ -72,6 +75,13 @@ namespace MPL{
 
 	void RequestData() {
 		I2c.write(I2C_ADDR, REG_CTRL_REG1, (uint8_t)(BASE_CTRL | ACQ_REQUEST));
+	}
+
+	bool CheckDevicePresent() { //Check WHO_AM_I register
+		uint8_t whoami;
+		if(!I2c.read(I2C_ADDR, 0x0C, 1, &whoami)){ 
+			return whoami == 0xC4;
+		} else return false;
 	}
 
 	void Init() {
