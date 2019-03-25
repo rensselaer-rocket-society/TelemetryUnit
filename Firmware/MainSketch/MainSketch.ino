@@ -51,7 +51,7 @@ ISR(TIMER2_OVF_vect) { // Runs every 6.5536 ms
 ISR(USART1_RX_vect) { // Feed GPS UART data to parser
   char data = UDR1;
   gps.encode(data);
-  Serial.print(data);
+//  Serial.print(data);
 }
 
 
@@ -67,10 +67,12 @@ void setup() {
   pinMode(PIN_GPS_WAKE, OUTPUT);
   pinMode(PIN_RF_SLEEP, OUTPUT);
   pinMode(PIN_GPS_FIX, INPUT);
-  pinMode(PIN_BAT_LEVEL, INPUT);
 
   digitalWrite(PIN_GPS_WAKE, HIGH); // GPS Awake
   digitalWrite(PIN_RF_SLEEP, LOW);  // xBee not sleeping
+
+  pinMode(PIN_BAT_LEVEL, INPUT);
+  analogReference(INTERNAL2V56); //Internal reference such that bat level is read in mV
 
   // Fallback if Arduino style doesn't work
   // DDRD |= 0x70;
