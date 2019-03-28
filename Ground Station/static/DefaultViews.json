@@ -1,0 +1,288 @@
+{
+	"openmct": {
+		"defaultViewRoot": {
+			"composition": [{
+				"namespace": "",
+				"key": "layoutView"
+			}, {
+				"namespace": "",
+				"key": "accelgraph"
+			}, {
+				"namespace": "",
+				"key": "gyrograph"
+			}, {
+				"namespace": "",
+				"key": "gpstab"
+			}, {
+				"namespace": "",
+				"key": "statusbox"
+			}],
+			"name": "MMD Default Telemetry Views",
+			"type": "folder",
+			"location": "ROOT",
+			"identifier": {
+				"namespace": "",
+				"key": "defaultViewRoot"
+			}
+		},
+		"layoutView": {
+			"composition": [{
+				"namespace": "",
+				"key": "accelgraph"
+			}, {
+				"namespace": "",
+				"key": "gyrograph"
+			}, {
+				"namespace": "",
+				"key": "gpstab"
+			}, {
+				"namespace": "rrs.mmd.measure",
+				"key": "altitude"
+			}, {
+				"namespace": "",
+				"key": "statusbox"
+			}],
+			"configuration": {
+				"layout": {
+					"panels": {
+						"rrs.mmd.measure:gps": {
+							"position": [23, 14],
+							"dimensions": [20, 11],
+							"hasFrame": true
+						},
+						"accelgraph": {
+							"position": [0, 3],
+							"dimensions": [18, 13],
+							"hasFrame": true
+						},
+						"gyrograph": {
+							"position": [0, 16],
+							"dimensions": [18, 13],
+							"hasFrame": true
+						},
+						"gpstab": {
+							"position": [18, 18],
+							"dimensions": [25, 11],
+							"hasFrame": true
+						},
+						"rrs.mmd.measure:altitude": {
+							"position": [18, 0],
+							"dimensions": [25, 18],
+							"hasFrame": true
+						},
+						"statusbox": {
+							"position": [0, 0],
+							"dimensions": [18, 3],
+							"hasFrame": true
+						}
+					}
+				}
+			},
+			"name": "BaseDisplay",
+			"type": "layout",
+			"location": "defaultViewRoot",
+			"identifier": {
+				"namespace": "",
+				"key": "layoutView"
+			}
+		},
+		"accelgraph": {
+			"composition": [{
+				"namespace": "rrs.mmd.measure",
+				"key": "accelx"
+			}, {
+				"namespace": "rrs.mmd.measure",
+				"key": "accely"
+			}, {
+				"namespace": "rrs.mmd.measure",
+				"key": "accelz"
+			}],
+			"configuration": {
+				"series": [{
+					"identifier": {
+						"namespace": "rrs.mmd.measure",
+						"key": "accelx"
+					}
+				}, {
+					"identifier": {
+						"namespace": "rrs.mmd.measure",
+						"key": "accely"
+					}
+				}, {
+					"identifier": {
+						"namespace": "rrs.mmd.measure",
+						"key": "accelz"
+					}
+				}],
+				"yAxis": {},
+				"xAxis": {}
+			},
+			"name": "Accelerometer All",
+			"type": "telemetry.plot.overlay",
+			"location": "defaultViewRoot",
+			"identifier": {
+				"namespace": "",
+				"key": "accelgraph"
+			}
+		},
+		"gyrograph": {
+			"composition": [{
+				"namespace": "rrs.mmd.measure",
+				"key": "gyrox"
+			}, {
+				"namespace": "rrs.mmd.measure",
+				"key": "gyroy"
+			}, {
+				"namespace": "rrs.mmd.measure",
+				"key": "gyroz"
+			}],
+			"configuration": {
+				"series": [{
+					"identifier": {
+						"namespace": "rrs.mmd.measure",
+						"key": "gyrox"
+					}
+				}, {
+					"identifier": {
+						"namespace": "rrs.mmd.measure",
+						"key": "gyroy"
+					}
+				}, {
+					"identifier": {
+						"namespace": "rrs.mmd.measure",
+						"key": "gyroz"
+					}
+				}],
+				"yAxis": {},
+				"xAxis": {}
+			},
+			"name": "Gyroscope All",
+			"type": "telemetry.plot.overlay",
+			"location": "defaultViewRoot",
+			"identifier": {
+				"namespace": "",
+				"key": "gyrograph"
+			}
+		},
+		"gpstab": {
+			"composition": [{
+				"namespace": "rrs.mmd.measure",
+				"key": "gps"
+			}],
+			"name": "GPS Tabular",
+			"type": "table",
+			"configuration": {
+				"table": {
+					"columns": {
+						"Timestamp": true,
+						"Latitude": true,
+						"Longitude": true
+					}
+				}
+			},
+			"location": "defaultViewRoot",
+			"identifier": {
+				"namespace": "",
+				"key": "gpstab"
+			}
+		},
+		"statusbox": {
+			"layoutGrid": [64, 16],
+			"composition": [{
+				"namespace": "rrs.mmd.measure",
+				"key": "accelx"
+			}, {
+				"namespace": "rrs.mmd.measure",
+				"key": "accely"
+			}, {
+				"namespace": "rrs.mmd.measure",
+				"key": "altitude"
+			}, {
+				"namespace": "rrs.mmd.measure",
+				"key": "temp"
+			}],
+			"name": "Status Box",
+			"type": "telemetry.fixed",
+			"configuration": {
+				"fixed-display": {
+					"elements": [{
+						"fill": "transparent",
+						"stroke": "transparent",
+						"text": "Vertical Acceleration:",
+						"x": 0,
+						"y": 1,
+						"width": 2,
+						"height": 1,
+						"type": "fixed.text",
+						"useGrid": true,
+						"size": "13px"
+					}, {
+						"type": "fixed.telemetry",
+						"x": 2,
+						"y": 1,
+						"id": "rrs.mmd.measure:accely",
+						"stroke": "transparent",
+						"color": "",
+						"titled": false,
+						"width": 3,
+						"height": 1,
+						"useGrid": true,
+						"size": "13px"
+					}, {
+						"fill": "transparent",
+						"stroke": "transparent",
+						"text": "Current Altitude:",
+						"x": 0,
+						"y": 0,
+						"width": 2,
+						"height": 1,
+						"type": "fixed.text",
+						"useGrid": true,
+						"size": "13px"
+					}, {
+						"type": "fixed.telemetry",
+						"x": 2,
+						"y": 0,
+						"id": "rrs.mmd.measure:altitude",
+						"stroke": "transparent",
+						"color": "",
+						"titled": false,
+						"width": 3,
+						"height": 1,
+						"useGrid": true,
+						"size": "13px"
+					}, {
+						"fill": "transparent",
+						"stroke": "transparent",
+						"text": "Temperature:",
+						"x": 0,
+						"y": 2,
+						"width": 2,
+						"height": 1,
+						"type": "fixed.text",
+						"useGrid": true,
+						"size": "13px"
+					}, {
+						"type": "fixed.telemetry",
+						"x": 2,
+						"y": 2,
+						"id": "rrs.mmd.measure:temp",
+						"stroke": "transparent",
+						"color": "",
+						"titled": false,
+						"width": 3,
+						"height": 1,
+						"useGrid": true,
+						"size": "13px"
+					}]
+				}
+			},
+			"location": "defaultViewRoot",
+			"identifier": {
+				"namespace": "",
+				"key": "statusbox"
+			}
+		}
+	},
+	"rootId": "defaultViewRoot"
+}
