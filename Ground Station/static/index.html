@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Open MCT</title>
+    <script src="openmct/openmct.js"></script>
+    <script src="plugins/socketio.js"></script>
+    <script src="plugins/WebsocketTelemetryPlugin.js"></script>
+    <script src="plugins/MMDTelemetryPlugin.js"></script>
+
+</head>
+<body>
+    <script>
+        openmct.setAssetPath('openmct');
+        openmct.install(openmct.plugins.LocalStorage());
+        openmct.install(openmct.plugins.MyItems());
+        openmct.install(openmct.plugins.UTCTimeSystem());
+        openmct.install(openmct.plugins.Espresso());
+        openmct.install(openmct.plugins.ImportExport())
+        openmct.install(openmct.plugins.StaticRootPlugin('rrs.mmd.default', 'DefaultViews.json'))
+
+        openmct.install(MMDTelemetryPlugin())
+        openmct.install(WebsocketTelemetryPlugin())
+
+
+        openmct.time.clock('WebsocketDataClock', {
+            start: -2 * 60000,
+            end: 0
+        });
+        // openmct.time.stopClock();
+        openmct.time.timeSystem('onboard-time', {start:0, end:60000});
+
+
+
+        openmct.start();
+    </script>
+</body>
+</html>
