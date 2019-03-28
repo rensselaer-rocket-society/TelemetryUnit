@@ -5,6 +5,9 @@
 
 namespace LSM{
 
+	const float ACCEL_TO_MPSPS = 0.004788;
+	const float GYRO_TO_DPS = 0.0175;
+
 	const uint8_t I2C_ADDR = 0x6B; //APPARENTLY I2C Library doesn't want shifted address
 
 	const uint8_t REG_STATUS = 0x1E;

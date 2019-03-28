@@ -1,5 +1,6 @@
 #include "libs/MPL3115A2_Altimeter.h"
 #include "libs/LSM6DS3_IMU.h"
+#include "libs/Packet.h"
 #include <TinyGPS++.h>
 
 // Useful pin numbers (see 64-pin-avr pins_arduino.h in MegaCore)
@@ -26,6 +27,7 @@ void USART1Init() { // Manually configure USART1 so we can use interrupts to fee
 
 bool gps_flag, accel_flag, alt_flag;
 TinyGPSPlus gps;
+Packet packetizer(&Serial);
 
 ISR(TIMER2_OVF_vect) { // Runs every 6.5536 ms
 
@@ -104,6 +106,7 @@ void setup() {
 
 void loop() {
   if(gps_flag){
+    packetizer.sendGPS(gps.location.lat(), gps.location.lng());
     // Serial.println();
     // Serial.print(gps.location.lat());
     // Serial.print(",");
@@ -117,11 +120,20 @@ void loop() {
 //    char outstring[100];
 //    sprintf(outstring, "%d,%d,%d,%d,%d,%d\r\n",dat.accel.x,dat.accel.y,dat.accel.z,dat.gyro.x,dat.gyro.y,dat.gyro.z);
 //    Serial.print(outstring);
+    packetizer.sendAccel(
+      dat.accel.x*LSM::ACCEL_TO_MPSPS,
+      dat.accel.y*LSM::ACCEL_TO_MPSPS,
+      dat.accel.z*LSM::ACCEL_TO_MPSPS,
+      dat.gyro.x*LSM::GYRO_TO_DPS,
+      dat.gyro.y*LSM::GYRO_TO_DPS,
+      dat.gyro.z*LSM::GYRO_TO_DPS
+    );
     accel_flag=0;
   }
   if(alt_flag){
     MPL::AltTempData dat = MPL::CheckAndRead();
 //    Serial.println(dat.alt/16.0);
+    packetizer.sendAltitude(dat.alt*MPL::ALT_TO_M, dat.temp*MPL::TEMP_TO_C);
     MPL::RequestData();
     alt_flag=0;
   }

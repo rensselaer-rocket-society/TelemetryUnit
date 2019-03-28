@@ -4,6 +4,8 @@
 #include <I2C.h>
 
 namespace MPL{
+	const float ALT_TO_M = 1.0/16.0;
+	const float TEMP_TO_C = 1.0/16.0;
 
 	const uint8_t I2C_ADDR = 0x60; //APPARENTLY I2C Library doesn't want shifted address
 

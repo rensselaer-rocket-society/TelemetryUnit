@@ -2,22 +2,27 @@
 
 
 #include "Arduino.h"
+#include "CRC8.h"
+#include "COBS.h"
 
 class Packet
 {
 public:
-    enum PacketContent { GPS, ALTITUDE, ACCEL };
+    enum PacketContent : uint8_t { GPS, ALTITUDE, ACCEL };
 
     Packet(HardwareSerial *serial);
 
-    void sendAltitude(uint8_t altitude, uint8_t temperature);
+    void sendAltitude(float altitude, float temperature);
     void sendGPS(float latitude, float longitude);
-    void sendAccel(float x_accel, float y_accel, float z_accel);
+    void sendAccel(	float x_accel, float y_accel, float z_accel,
+    				float x_gyro, float y_gyro, float z_gyro);
 
 private:
-    void sendPacket(uint8_t packetContent, uint8_t *data, uint8_t data_length);
+    void sendPacket(PacketContent packetContent, uint8_t *data, uint8_t data_length);
 
     HardwareSerial *serial;
+    CRC8 crcCalculator;
+    COBS byteStuffer;
 
     int sequence_num;
 
