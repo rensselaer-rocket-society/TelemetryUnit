@@ -52,6 +52,7 @@ void Packet::sendPacket(PacketContent packet_content, uint8_t *data, uint8_t dat
     for (size_t i = 0; i < tx_len; i++) {
         serial->write(encoded_buffer[i]);
     }
+    serial->write('\0'); //Send packet terminator
     delete encoded_buffer;
     delete packet;
 }

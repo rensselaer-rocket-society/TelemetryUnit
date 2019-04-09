@@ -8,7 +8,7 @@
 class Packet
 {
 public:
-    enum PacketContent : uint8_t { GPS, ALTITUDE, ACCEL };
+    enum PacketContent : uint8_t { GPS=0x01, ALTITUDE=0x02, ACCEL=0x03 };
 
     Packet(HardwareSerial *serial);
 

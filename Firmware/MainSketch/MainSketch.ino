@@ -1,14 +1,17 @@
+#include <SD.h>
 #include "libs/MPL3115A2_Altimeter.h"
 #include "libs/LSM6DS3_IMU.h"
 #include "libs/Packet.h"
 #include <TinyGPS++.h>
+
 
 // Useful pin numbers (see 64-pin-avr pins_arduino.h in MegaCore)
 #define PIN_GPS_WAKE 23
 #define PIN_RF_SLEEP 24
 #define PIN_GPS_FIX 22
 #define PIN_BAT_LEVEL 45
-
+#define PIN_SD_CHIP_SELECT 12
+const String SD_LOG_FILE = "MMDLaunchLog.csv";
 
 void TimerInit() {
   ASSR &= ~0x20; // Use IO Clock
@@ -28,6 +31,8 @@ void USART1Init() { // Manually configure USART1 so we can use interrupts to fee
 bool gps_flag, accel_flag, alt_flag;
 TinyGPSPlus gps;
 Packet packetizer(&Serial);
+bool logEnable = true;
+File loggerFile;
 
 ISR(TIMER2_OVF_vect) { // Runs every 6.5536 ms
 
@@ -102,38 +107,72 @@ void setup() {
     MPL::Init();
     LSM::Init();
   }
+
+  // see if the card is present and can be initialized:
+  if (!SD.begin(PIN_SD_CHIP_SELECT)) {
+    Serial.println("SD Card Missing!!! Logging Disabled");
+    logEnable = false;
+  }
+  else {
+    loggerFile = SD.open(SD_LOG_FILE, FILE_WRITE);
+    Serial.print("SD Card Initialized. Logging to ");
+    Serial.println(SD_LOG_FILE);
+  }
 }
 
 void loop() {
   if(gps_flag){
+    if(logEnable){
+      loggerFile.write('1');
+      loggerFile.write(',');
+      loggerFile.print(gps.location.lat());
+      loggerFile.write(',');
+      loggerFile.println(gps.location.lng());
+    }
     packetizer.sendGPS(gps.location.lat(), gps.location.lng());
-    // Serial.println();
-    // Serial.print(gps.location.lat());
-    // Serial.print(",");
-    // Serial.print(gps.location.lng());
-    // Serial.println();
-    // Serial.println();
     gps_flag=0;
   }
   if(accel_flag){
     LSM::AccelGyroData dat = LSM::CheckAndRead();
-//    char outstring[100];
-//    sprintf(outstring, "%d,%d,%d,%d,%d,%d\r\n",dat.accel.x,dat.accel.y,dat.accel.z,dat.gyro.x,dat.gyro.y,dat.gyro.z);
-//    Serial.print(outstring);
-    packetizer.sendAccel(
-      dat.accel.x*LSM::ACCEL_TO_MPSPS,
-      dat.accel.y*LSM::ACCEL_TO_MPSPS,
-      dat.accel.z*LSM::ACCEL_TO_MPSPS,
-      dat.gyro.x*LSM::GYRO_TO_DPS,
-      dat.gyro.y*LSM::GYRO_TO_DPS,
-      dat.gyro.z*LSM::GYRO_TO_DPS
-    );
+    float x_mpsps = dat.accel.x*LSM::ACCEL_TO_MPSPS;
+    float y_mpsps = dat.accel.y*LSM::ACCEL_TO_MPSPS;
+    float z_mpsps = dat.accel.z*LSM::ACCEL_TO_MPSPS;
+    float x_dps = dat.gyro.x*LSM::GYRO_TO_DPS;
+    float y_dps = dat.gyro.y*LSM::GYRO_TO_DPS;
+    float z_dps = dat.gyro.z*LSM::GYRO_TO_DPS;
+
+    if(logEnable){
+      loggerFile.write('3');
+      loggerFile.write(',');
+      loggerFile.print(x_mpsps);
+      loggerFile.write(',');
+      loggerFile.print(y_mpsps);
+      loggerFile.write(',');
+      loggerFile.print(z_mpsps);
+      loggerFile.write(',');
+      loggerFile.print(x_dps);
+      loggerFile.write(',');
+      loggerFile.print(y_dps);
+      loggerFile.write(',');
+      loggerFile.println(z_dps);
+    }
+    
+    packetizer.sendAccel(x_mpsps, y_mpsps, z_mpsps, x_dps, y_dps, z_dps);
     accel_flag=0;
   }
   if(alt_flag){
     MPL::AltTempData dat = MPL::CheckAndRead();
-//    Serial.println(dat.alt/16.0);
-    packetizer.sendAltitude(dat.alt*MPL::ALT_TO_M, dat.temp*MPL::TEMP_TO_C);
+    float alt_m = dat.alt*MPL::ALT_TO_M;
+    float temp_c = dat.temp*MPL::TEMP_TO_C;
+    if(logEnable){
+      loggerFile.write('2');
+      loggerFile.write(',');
+      loggerFile.print(alt_m);
+      loggerFile.write(',');
+      loggerFile.println(temp_c);
+    }
+    
+    packetizer.sendAltitude(alt_m, temp_c);
     MPL::RequestData();
     alt_flag=0;
   }
