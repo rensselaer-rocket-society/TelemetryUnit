@@ -4,8 +4,10 @@
     <title>Open MCT</title>
     <script src="openmct/openmct.js"></script>
     <script src="plugins/socketio.js"></script>
+    <script src="plugins/http.js"></script>
     <script src="plugins/WebsocketTelemetryPlugin.js"></script>
     <script src="plugins/MMDTelemetryPlugin.js"></script>
+    <script src="plugins/HistoricalTelemetryPlugin.js"></script>
 
 </head>
 <body>
@@ -20,6 +22,7 @@
 
         openmct.install(MMDTelemetryPlugin())
         openmct.install(WebsocketTelemetryPlugin())
+        openmct.install(HistoricalTelemetryPlugin())
 
 
         openmct.time.clock('WebsocketDataClock', {

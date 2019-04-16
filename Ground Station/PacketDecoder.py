@@ -4,18 +4,18 @@ import time
 import random
 
 class DecoderThread(threading.Thread):
-	def __init__(self, socket):
+	def __init__(self, teleManager):
 		super(DecoderThread, self).__init__(daemon=True)
-		self.socket = socket
+		self.telemetry = teleManager
 
 	def run(self):
 		i=0
 		while True:
 			if i%1000 == 0:
-				self.socket.emit("telemetry",[
+				self.telemetry.logEvents([
 						{"id":"gps", "timestamp":i, "latitude":40.0+random.uniform(-5,5), "longitude":-75.0+random.uniform(-5,5)}
 					])
-			self.socket.emit("telemetry",[
+			self.telemetry.logEvents([
 					{"id":"accelx", "timestamp":i, "accelx":random.uniform(-1,1)},
 					{"id":"accely", "timestamp":i, "accely":random.uniform(-1,1)},
 					{"id":"accelz", "timestamp":i, "accelz":random.uniform(-1,1)},
