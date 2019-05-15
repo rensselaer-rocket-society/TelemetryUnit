@@ -1,4 +1,5 @@
 from bisect import bisect_left, bisect_right
+from threading import Lock
 
 class Event:
 	def __init__(self, time, obj):
@@ -32,12 +33,16 @@ class TelemetryManager:
 	def __init__(self, socket):
 		self.eventlogs = {}
 		self.socket = socket
+		self.datalock = Lock()
+		self.fileiolock = Lock()
 
 	def _logEvent(self, e):
 		eventid = e["id"];
 		if eventid not in self.eventlogs:
 			self.eventlogs[eventid] = []
+		self.datalock.acquire() # Needed to ensure that a concurrent flush to disk does not run into reallocation problems
 		self.eventlogs[eventid].append(Event.fromJSON(e))
+		self.datalock.release()
 
 	def logEvents(self, events):
 		self.socket.emit("telemetry",events)
@@ -49,45 +54,61 @@ class TelemetryManager:
 			return extractRange(self.eventlogs[eventtype], mint, maxt)
 		return []
 
-	def saveToDisk(filename):
+	def saveToDisk(self,filename):
+		self.fileiolock.acquire()
 		f = open(filename, "w");
-		for vals in eventlogs["gps"]:
+		for i in range(len(self.eventlogs["gps"])):
+			self.datalock.acquire() # Reacquire each iteration to ensure realtime data can still come through
+			vals = self.eventlogs["gps"][i]
+			self.datalock.release()
 			f.write('1,' + str(vals.time) + ',' + str(vals.data['latitude']) + ',' + str(vals.data['longitude']) + '\n');
-		for vals in eventlogs["altitude"]:
+		for i in range(len(self.eventlogs["altitude"])):
+			self.datalock.acquire()
+			vals = self.eventlogs["altitude"][i]
+			self.datalock.release()
 			f.write('2,' + str(vals.time) + ',' + str(vals.data["altitude"]) + '\n');
-		for i in range(len(eventlogs["accelx"])):
-			f.write('3,'+str(eventlogs["accelx"][i].time)+','+
-				str(eventlogs["accelx"][i].data["accelx"]) + ',' +
-				str(eventlogs["accely"][i].data["accely"]) + ',' +
-				str(eventlogs["accelz"][i].data["accelz"]) + ',' +
-				str(eventlogs["gyrox"][i].data["gyrox"]) + ',' +
-				str(eventlogs["gyroy"][i].data["gyroy"]) + ',' +
-				str(eventlogs["gyroz"][i].data["gyroz"]) + '\n'
-			)
+		for i in range(len(self.eventlogs["accelx"])):
+			self.datalock.acquire() # Only compute string under lock
+			outstr = '3,'+str(self.eventlogs["accelx"][i].time)+','+ \
+				str(self.eventlogs["accelx"][i].data["accelx"]) + ',' + \
+				str(self.eventlogs["accely"][i].data["accely"]) + ',' + \
+				str(self.eventlogs["accelz"][i].data["accelz"]) + ',' + \
+				str(self.eventlogs["gyrox"][i].data["gyrox"]) + ',' + \
+				str(self.eventlogs["gyroy"][i].data["gyroy"]) + ',' + \
+				str(self.eventlogs["gyroz"][i].data["gyroz"]) + '\n'
+			self.datalock.release()
+			f.write(outstr)
+		self.fileiolock.release()
 
-	def restoreFromDisk(filename):
-		f = open(filename, "w");
+	def restoreFromDisk(self,filename):
+		self.fileiolock.acquire()
+		f = open(filename, "r");
 		for event in f:
 			vals = event.split(',')
 			type = vals[0]
 			t = int(vals[1])
 			if type == '1': # GPS
-				eventlogs["gps"].append(Event.fromJSON({
+				if "gps" not in self.eventlogs:
+					self.eventlogs["gps"] = []
+				self._logEvent({
 					"id": "gps",
 					"timestamp": t,
 					"latitude": float(vals[2]),
 					"longitude": float(vals[3])
-				}))
+				})
 			elif type == '2': # Altimeter
-				eventlogs['altitude'].append(Event.fromJSON({
+				if "gps" not in self.eventlogs:
+					self.eventlogs["gps"] = []
+				self._logEvent({
 					"id": "altitude",
 					"timestamp": t,
 					"altitude": float(vals[2])
-				}))
+				})
 			elif type == '3': # Accelerometer
-				eventlogs['accelx'].append(Event.fromJSON({"id":"accelx", "timestamp":t, "accelx":float(vals[2])}))
-				eventlogs['accely'].append(Event.fromJSON({"id":"accely", "timestamp":t, "accely":float(vals[3])}))
-				eventlogs['accelz'].append(Event.fromJSON({"id":"accelz", "timestamp":t, "accelz":float(vals[4])}))
-				eventlogs['gyrox'].append(Event.fromJSON({"id":"gyrox",  "timestamp":t, "gyrox": float(vals[5])}))
-				eventlogs['gyroy'].append(Event.fromJSON({"id":"gyroy",  "timestamp":t, "gyroy": float(vals[6])}))
-				eventlogs['gyroz'].append(Event.fromJSON({"id":"gyroz",  "timestamp":t, "gyroz": float(vals[7])}))
+				self._logEvent({"id":"accelx", "timestamp":t, "accelx":float(vals[2])})
+				self._logEvent({"id":"accely", "timestamp":t, "accely":float(vals[3])})
+				self._logEvent({"id":"accelz", "timestamp":t, "accelz":float(vals[4])})
+				self._logEvent({"id":"gyrox",  "timestamp":t, "gyrox": float(vals[5])})
+				self._logEvent({"id":"gyroy",  "timestamp":t, "gyroy": float(vals[6])})
+				self._logEvent({"id":"gyroz",  "timestamp":t, "gyroz": float(vals[7])})
+		self.fileiolock.release()

@@ -24,13 +24,30 @@
         openmct.install(WebsocketTelemetryPlugin())
         openmct.install(HistoricalTelemetryPlugin())
 
+        let ONE_MINUTE = 60000;
 
-        openmct.time.clock('WebsocketDataClock', {
-            start: -2 * 60000,
-            end: 0
-        });
-        // openmct.time.stopClock();
-        openmct.time.timeSystem('onboard-time', {start:0, end:60000});
+        openmct.install(openmct.plugins.Conductor({
+            menuOptions: [
+                {
+                    timeSystem: 'onboard-time',
+                    bounds: {start: 0, end: ONE_MINUTE},
+                    zoomOutLimit: 10*ONE_MINUTE,
+                    zoomInLimit: 1000 //1 second
+                },
+                {
+                    clock: 'WebsocketDataClock',
+                    timeSystem: 'onboard-time',
+                    clockOffsets: {start: -2*ONE_MINUTE, end: 0}
+                }
+            ]
+        }));
+
+        // openmct.time.clock('WebsocketDataClock', {
+        //     start: -2 * 60000,
+        //     end: 0
+        // });
+        // // openmct.time.stopClock();
+        // openmct.time.timeSystem('onboard-time', {start:0, end:60000});
 
 
 

@@ -30,16 +30,16 @@ function WebsocketTelemetryPlugin() {
             }
 
 		socket.on('telemetry', function(data) {
-            var tickTime = -1;
+            var latest = -1;
             data.map(function (measurement) {
                 if(telemetry_listeners[measurement.id]){
                     telemetry_listeners[measurement.id](measurement);
                 }
-                if(measurement.timestamp > clock_time){
-                    tickTime = measurement.timestamp;
+                if(measurement.timestamp > latest){
+                    latest = measurement.timestamp;
                 }
             });
-            if(tickTime != -1) clock.tick(tickTime);
+            if(latest > clock_time) clock.tick(latest);
 		});
 
 		var provider = {
