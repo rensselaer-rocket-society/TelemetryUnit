@@ -57,17 +57,17 @@ class TelemetryManager:
 	def saveToDisk(self,filename):
 		self.fileiolock.acquire()
 		f = open(filename, "w");
-		for i in range(len(self.eventlogs["gps"])):
+		for i in range(len(self.eventlogs.get("gps",[]))):
 			self.datalock.acquire() # Reacquire each iteration to ensure realtime data can still come through
 			vals = self.eventlogs["gps"][i]
 			self.datalock.release()
 			f.write('1,' + str(vals.time) + ',' + str(vals.data['latitude']) + ',' + str(vals.data['longitude']) + '\n');
-		for i in range(len(self.eventlogs["altitude"])):
+		for i in range(len(self.eventlogs.get("altitude",[]))):
 			self.datalock.acquire()
 			vals = self.eventlogs["altitude"][i]
 			self.datalock.release()
 			f.write('2,' + str(vals.time) + ',' + str(vals.data["altitude"]) + '\n');
-		for i in range(len(self.eventlogs["accelx"])):
+		for i in range(len(self.eventlogs.get("accelx",[]))):
 			self.datalock.acquire() # Only compute string under lock
 			outstr = '3,'+str(self.eventlogs["accelx"][i].time)+','+ \
 				str(self.eventlogs["accelx"][i].data["accelx"]) + ',' + \
@@ -88,8 +88,6 @@ class TelemetryManager:
 			type = vals[0]
 			t = int(vals[1])
 			if type == '1': # GPS
-				if "gps" not in self.eventlogs:
-					self.eventlogs["gps"] = []
 				self._logEvent({
 					"id": "gps",
 					"timestamp": t,
@@ -97,14 +95,12 @@ class TelemetryManager:
 					"longitude": float(vals[3])
 				})
 			elif type == '2': # Altimeter
-				if "gps" not in self.eventlogs:
-					self.eventlogs["gps"] = []
 				self._logEvent({
 					"id": "altitude",
 					"timestamp": t,
 					"altitude": float(vals[2])
 				})
-			elif type == '3': # Accelerometer
+			elif type == '3': # Accelerometer (can't use logEvents as that would broadcast)
 				self._logEvent({"id":"accelx", "timestamp":t, "accelx":float(vals[2])})
 				self._logEvent({"id":"accely", "timestamp":t, "accely":float(vals[3])})
 				self._logEvent({"id":"accelz", "timestamp":t, "accelz":float(vals[4])})
