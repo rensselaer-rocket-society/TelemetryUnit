@@ -32,16 +32,25 @@ def lookup(eventype):
 
 @app.route('/persist')
 def persist():
-	FuncThread(telemetry.saveToDisk, args.logfile).start() # Start persisting task
-	return ('', 204)
+	if not args.view_only:
+		FuncThread(telemetry.saveToDisk, args.logfile).start() # Start persisting task
+		return '', 204 # Success response code (204 No Content)
+	else:
+		abort(403) # Save of already archived log not allow (403 Forbidden)
 
 if __name__ == '__main__':
 
 	parser = argparse.ArgumentParser(description='MMD Ground Station Web Server')
-	parser.add_argument('logfile', nargs='?', default='log.txt',
-						help='File to log this flight to')
-	parser.add_argument('--view-only', '-v', action='store_true',
-						help='Open the specified logfile for viewing (ie. do not attempt to read new data from serial port')
+	subparse_list = parser.add_subparsers(dest='operation', required=True)
+
+	view_args = subparse_list.add_parser('view', help='View the complete filght data from a saved log')
+	view_args.add_argument('logfile', help='Log archive to pull data from')
+	view_args.set_defaults(view_only=True)
+
+	downlink_args = subparse_list.add_parser('downlink', help='Decode and display live telemetry from a Serial Port')
+	downlink_args.add_argument('serial', help='Serial device providing telemetry (COM[n])')
+	downlink_args.add_argument('logfile', nargs='?', default='log.txt', help='Name of logfile to use when persisting data (request localhost:8000/persist).  Default is log.txt')
+	downlink_args.set_defaults(view_only=False)
 
 	args = parser.parse_args();
 
@@ -49,7 +58,7 @@ if __name__ == '__main__':
 	telemetry = TelemetryManager(socketio)
 
 	if not args.view_only:
-		decoder = DecoderThread(telemetry)
+		decoder = DecoderThread(telemetry, args.serial)
 		decoder.start()
 	else:
 		telemetry.restoreFromDisk(args.logfile)

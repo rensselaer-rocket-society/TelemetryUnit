@@ -64,9 +64,10 @@ class TelemetryManager:
 			f.write('1,' + str(vals.time) + ',' + str(vals.data['latitude']) + ',' + str(vals.data['longitude']) + '\n');
 		for i in range(len(self.eventlogs.get("altitude",[]))):
 			self.datalock.acquire()
-			vals = self.eventlogs["altitude"][i]
+			alt = self.eventlogs["altitude"][i]
+			temp = self.eventlogs["temp"][i]
 			self.datalock.release()
-			f.write('2,' + str(vals.time) + ',' + str(vals.data["altitude"]) + '\n');
+			f.write('2,' + str(alt.time) + ',' + str(alt.data["altitude"]) + ',' + str(temp.data['temp']) + '\n');
 		for i in range(len(self.eventlogs.get("accelx",[]))):
 			self.datalock.acquire() # Only compute string under lock
 			outstr = '3,'+str(self.eventlogs["accelx"][i].time)+','+ \
@@ -88,18 +89,10 @@ class TelemetryManager:
 			type = vals[0]
 			t = int(vals[1])
 			if type == '1': # GPS
-				self._logEvent({
-					"id": "gps",
-					"timestamp": t,
-					"latitude": float(vals[2]),
-					"longitude": float(vals[3])
-				})
+				self._logEvent({"id": "gps", "timestamp": t, "latitude": float(vals[2]), "longitude": float(vals[3])})
 			elif type == '2': # Altimeter
-				self._logEvent({
-					"id": "altitude",
-					"timestamp": t,
-					"altitude": float(vals[2])
-				})
+				self._logEvent({"id": "altitude", "timestamp": t, "altitude": float(vals[2])})
+				self._logEvent({"id": "temp", "timestamp": t, "temp": float(vals[3])})
 			elif type == '3': # Accelerometer (can't use logEvents as that would broadcast)
 				self._logEvent({"id":"accelx", "timestamp":t, "accelx":float(vals[2])})
 				self._logEvent({"id":"accely", "timestamp":t, "accely":float(vals[3])})

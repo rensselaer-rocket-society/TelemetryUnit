@@ -1,6 +1,8 @@
 import threading
 import time
 
+import serial
+
 import random
 from cobs import cobs
 import crc8
@@ -14,8 +16,9 @@ ACCEL_DATA_FORMAT = '<ffffff'
 PACKET_HEADER_FORMAT = '<BBB'
 
 class DecoderThread(threading.Thread):
-	def __init__(self, teleManager):
+	def __init__(self, teleManager, ser_port):
 		super(DecoderThread, self).__init__(daemon=True)
+		self.ser_port = ser_port
 		self.telemetry = teleManager
 
 	def decode_GPS(self,t,data):
@@ -33,6 +36,10 @@ class DecoderThread(threading.Thread):
 					"id": "altitude",
 					"timestamp": t,
 					"altitude": alt
+				},{
+					"id": "temp",
+					"timestamp": t,
+					"temp": temp
 				}])
 
 	def decode_Accel(self,t,data):
@@ -53,12 +60,11 @@ class DecoderThread(threading.Thread):
 		next_seq = UInt8(0)
 		crcCalc = crc8.crc8()
 
-		stream = open('test.log','rb') # Replace with serial stream
+		stream = serial.Serial(self.ser_port,9600)
 
 		t0 = time.perf_counter()
 
 		while 1:
-			time.sleep(9/9600) # Simulate 9600 baud at max rate
 			newbyte = stream.read(1);
 			if newbyte != b'\x00':
 				packetBuffer += newbyte
@@ -133,7 +139,7 @@ if __name__ == '__main__':
 		def logEvents(self,arr):
 			print("Recieved {} events".format(len(arr)))
 
-	decoder = DecoderThread(Dummy())
+	decoder = DecoderThread(Dummy(), 'COM6')
 	decoder.start()
 	while 1:
 		time.sleep(0.1)
