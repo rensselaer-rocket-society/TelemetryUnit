@@ -24,6 +24,6 @@ private:
     CRC8 crcCalculator;
     COBS byteStuffer;
 
-    int sequence_num;
+    uint8_t sequence_num;
 
 };
