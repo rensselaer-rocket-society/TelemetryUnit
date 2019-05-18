@@ -54,7 +54,7 @@ class DecoderThread(threading.Thread):
 		])
 
 	def run(self):
-		packetBuffer = b''
+		packetBuffer = bytearray() # Mutable byte list (efficient append)
 		errors = 0
 		drops = 0
 		next_seq = UInt8(0)
@@ -65,9 +65,9 @@ class DecoderThread(threading.Thread):
 		t0 = time.perf_counter()
 
 		while 1:
-			newbyte = stream.read(1);
-			if newbyte != b'\x00':
-				packetBuffer += newbyte
+			newbyte = stream.read(1)[0]; # Indexing to convert length 1 bytes object to single byte
+			if newbyte != 0:
+				packetBuffer.append(newbyte)
 			else:
 				t = (time.perf_counter()-t0)*1000 # Capture arrival time (ms)
 				try:
@@ -77,21 +77,19 @@ class DecoderThread(threading.Thread):
 					# Header inconsistency detection
 					if(p_seq != next_seq):
 						missed = p_seq-next_seq
-						print("Missed {} packets!".format(missed))
+						print("[{:.2f}]\tMissed {} packets!".format(t,missed))
 						drops += missed
 
 					next_seq = UInt8(p_seq)+1 # Need fixed width to handle wraparound
 
 
 					if(p_len != len(packet_decoded)):
-						print("LENGTH ERROR")
-						raise Exception('Length Error')
+						raise Exception('Inconsistent Packet Length')
 
 					crc_sent = packet_decoded[-1:] # Extract as 1 element array to match digest format
 					crcCalc.update(packet_decoded[:-1]) 
 					if crcCalc.digest() != crc_sent:
-						print("CRC ERROR")
-						raise Exception('CRC Error')
+						raise Exception('CRC Mismatch')
 
 
 					data_bytes = packet_decoded[3:-1]
@@ -102,13 +100,13 @@ class DecoderThread(threading.Thread):
 					elif(p_type == 3):
 						self.decode_Accel(t,data_bytes)
 					else:
-						print("Unrecognized packet type {}!".format(p_type))
+						print("[{:.2f}]\tUnrecognized packet type {}!".format(t,p_type))
 
 				except Exception as e:
-					print("Error : {}\n{}".format(packetBuffer,e))
+					print("[{:.2f}]\tError: {} --- {}".format(t,e,packetBuffer.hex()))
 					errors += 1
 
-				packetBuffer = b'' # Prep for next packet
+				del packetBuffer[:] # Clear out buffer
 
 
 

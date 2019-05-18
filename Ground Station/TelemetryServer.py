@@ -27,7 +27,6 @@ def root():
 def lookup(eventype):
 	startt = float(request.args.get("start"))
 	endt = float(request.args.get("end"))
-	print("Getting " + eventype + " events from time " + str(startt) + " to " + str(endt))
 	return jsonify([e.data for e in telemetry.serviceRequest(eventype, startt, endt)])
 
 @app.route('/persist')
@@ -54,7 +53,7 @@ if __name__ == '__main__':
 
 	args = parser.parse_args();
 
-	socketio = SocketIO(app, logger=True, engineio_logger=True)
+	socketio = SocketIO(app, logger=False, engineio_logger=False)
 	telemetry = TelemetryManager(socketio)
 
 	if not args.view_only:
