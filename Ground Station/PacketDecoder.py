@@ -53,19 +53,36 @@ class DecoderThread(threading.Thread):
 			{"id":"gyroz",  "timestamp":t, "gyroz":gyroz }
 		])
 
+	def getSerial(self):
+		while 1:
+			try:
+				stream = serial.Serial(self.ser_port,115200)
+				return stream
+			except:
+				continue
+
+
+
 	def run(self):
 		packetBuffer = bytearray() # Mutable byte list (efficient append)
 		errors = 0
 		drops = 0
 		next_seq = UInt8(0)
-		crcCalc = crc8.crc8()
 
-		stream = serial.Serial(self.ser_port,9600)
+		stream = self.getSerial()
 
 		t0 = time.perf_counter()
 
 		while 1:
-			newbyte = stream.read(1)[0]; # Indexing to convert length 1 bytes object to single byte
+			try:
+				newbyte = stream.read(1);
+			except:
+				print("Serial Read Error")
+				stream = self.getSerial()
+				continue
+			if len(newbyte) == 0:
+				continue
+			newbyte = newbyte[0] # Indexing to convert length 1 bytes object to single byte
 			if newbyte != 0:
 				packetBuffer.append(newbyte)
 			else:
@@ -87,9 +104,10 @@ class DecoderThread(threading.Thread):
 						raise Exception('Inconsistent Packet Length')
 
 					crc_sent = packet_decoded[-1:] # Extract as 1 element array to match digest format
+					crcCalc = crc8.crc8()
 					crcCalc.update(packet_decoded[:-1]) 
 					if crcCalc.digest() != crc_sent:
-						raise Exception('CRC Mismatch')
+						raise Exception('CRC Mismatch ({:02X} vs {:02X})'.format(crc_sent[0], crcCalc.digest()[0]))
 
 
 					data_bytes = packet_decoded[3:-1]

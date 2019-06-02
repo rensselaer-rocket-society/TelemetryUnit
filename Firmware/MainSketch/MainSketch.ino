@@ -69,7 +69,7 @@ void setup() {
   
   TimerInit();
   USART1Init();
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   pinMode(PIN_GPS_WAKE, OUTPUT);
   pinMode(PIN_RF_SLEEP, OUTPUT);

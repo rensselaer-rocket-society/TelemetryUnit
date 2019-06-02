@@ -87,7 +87,7 @@ class TelemetryManager:
 		for event in f:
 			vals = event.split(',')
 			type = vals[0]
-			t = int(vals[1])
+			t = float(vals[1])
 			if type == '1': # GPS
 				self._logEvent({"id": "gps", "timestamp": t, "latitude": float(vals[2]), "longitude": float(vals[3])})
 			elif type == '2': # Altimeter

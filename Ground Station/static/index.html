@@ -2,6 +2,11 @@
 <html>
 <head>
     <title>Open MCT</title>
+
+    <link rel="shortcut icon" type="image/png" href="/img/RRS.png" />
+
+    <meta name="theme-color" content="#ffffff">
+
     <script src="openmct/openmct.js"></script>
     <script src="plugins/socketio.js"></script>
     <script src="plugins/http.js"></script>
@@ -41,6 +46,11 @@
                 }
             ]
         }));
+
+
+        openmct.indicators.add({
+            element: persistIndicator
+        });
 
         // openmct.time.clock('WebsocketDataClock', {
         //     start: -2 * 60000,
