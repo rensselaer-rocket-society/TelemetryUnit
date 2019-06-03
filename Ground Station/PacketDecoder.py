@@ -103,11 +103,11 @@ class DecoderThread(threading.Thread):
 					if(p_len != len(packet_decoded)):
 						raise Exception('Inconsistent Packet Length')
 
-					crc_sent = packet_decoded[-1:] # Extract as 1 element array to match digest format
 					crcCalc = crc8.crc8()
-					crcCalc.update(packet_decoded[:-1]) 
-					if crcCalc.digest() != crc_sent:
-						raise Exception('CRC Mismatch ({:02X} vs {:02X})'.format(crc_sent[0], crcCalc.digest()[0]))
+					crcCalc.update(packet_decoded[:]) # Compute CRC, total CRC should be zero if no error
+					crcVal = crcCalc.digest()[0]
+					if crcVal != 0:
+						raise Exception('Nonzero CRC ({:02X})!'.format(crcVal))
 
 
 					data_bytes = packet_decoded[3:-1]
@@ -126,36 +126,13 @@ class DecoderThread(threading.Thread):
 
 				del packetBuffer[:] # Clear out buffer
 
-
-
-
-
-		# i=0
-		# while True:
-		# 	if i%1000 == 0:
-		# 		self.telemetry.logEvents([
-		# 				{"id":"gps", "timestamp":i, "latitude":40.0+random.uniform(-5,5), "longitude":-75.0+random.uniform(-5,5)}
-		# 			])
-		# 	self.telemetry.logEvents([
-		# 			{"id":"accelx", "timestamp":i, "accelx":random.uniform(-1,1)},
-		# 			{"id":"accely", "timestamp":i, "accely":random.uniform(-1,1)},
-		# 			{"id":"accelz", "timestamp":i, "accelz":random.uniform(-1,1)},
-		# 			{"id":"gyrox", "timestamp":i, "gyrox":random.uniform(-90,90)},
-		# 			{"id":"gyroy", "timestamp":i, "gyroy":random.uniform(-90,90)},
-		# 			{"id":"gyroz", "timestamp":i, "gyroz":random.uniform(-90,90)},
-		# 			{"id":"altitude", "timestamp":i, "altitude":max(i - i**2/100000,0)+random.uniform(-10,10)}
-		# 		])
-		# 	i+=100
-		# 	time.sleep(0.1)
-
-
 if __name__ == '__main__':
 
 	class Dummy:
 		def logEvents(self,arr):
 			print("Recieved {} events".format(len(arr)))
 
-	decoder = DecoderThread(Dummy(), 'COM6')
+	decoder = DecoderThread(Dummy(), 'COM7')
 	decoder.start()
 	while 1:
 		time.sleep(0.1)

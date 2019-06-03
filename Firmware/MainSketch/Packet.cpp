@@ -45,7 +45,8 @@ void Packet::sendPacket(PacketContent packet_content, uint8_t *data, uint8_t dat
     packet[1] = packet_length;
     packet[2] = sequence_num++;
     memcpy(packet+3, data, data_length);
-    packet[packet_length-1] = crcCalculator.get_crc8(packet, packet_length-1);
+    packet[packet_length-1] = 0x00; // Feed zeros to CRC calculator
+    packet[packet_length-1] = crcCalculator.get_crc8(packet, packet_length); // Compute and insert CRC
     
     unsigned int encoded_size = byteStuffer.getEncodedBufferSize(packet_length);
     uint8_t *encoded_buffer = new uint8_t[encoded_size];
