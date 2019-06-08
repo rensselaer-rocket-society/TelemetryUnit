@@ -104,10 +104,10 @@ class DecoderThread(threading.Thread):
 						raise Exception('Inconsistent Packet Length')
 
 					crcCalc = crc8.crc8()
-					crcCalc.update(packet_decoded[:]) # Compute CRC, total CRC should be zero if no error
+					crcCalc.update(packet_decoded) # Compute CRC, total CRC should be zero if no error
 					crcVal = crcCalc.digest()[0]
 					if crcVal != 0:
-						raise Exception('Nonzero CRC ({:02X})!'.format(crcVal))
+						raise Exception('Nonzero CRC ({:02X}) {}!'.format(crcVal, packet_decoded.hex()))
 
 
 					data_bytes = packet_decoded[3:-1]

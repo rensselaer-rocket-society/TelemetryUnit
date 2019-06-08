@@ -1,9 +1,15 @@
-#include <SD.h>
 #include "libs/MPL3115A2_Altimeter.h"
 #include "libs/LSM6DS3_IMU.h"
 #include "libs/Packet.h"
 #include <TinyGPS++.h>
+#include <stdarg.h>
 
+#define LOG_SD 1
+#define TX_XBEE 1
+
+#if LOG_SD
+#include <SD.h>
+#endif
 
 // Useful pin numbers (see 64-pin-avr pins_arduino.h in MegaCore)
 #define PIN_GPS_WAKE 23
@@ -11,7 +17,10 @@
 #define PIN_GPS_FIX 22
 #define PIN_BAT_LEVEL 45
 #define PIN_SD_CHIP_SELECT 12
-const String SD_LOG_FILE = "MMDLaunchLog.csv";
+
+#if LOG_SD
+const String SD_LOG_FILE = "log.csv";
+#endif
 
 void TimerInit() {
   ASSR &= ~0x20; // Use IO Clock
@@ -31,8 +40,10 @@ void USART1Init() { // Manually configure USART1 so we can use interrupts to fee
 bool gps_flag, accel_flag, alt_flag;
 TinyGPSPlus gps;
 Packet packetizer(&Serial);
-bool logEnable = true;
+
+#if LOG_SD
 File loggerFile;
+#endif
 
 ISR(TIMER2_OVF_vect) { // Runs every 6.5536 ms
 
@@ -108,32 +119,59 @@ void setup() {
     LSM::Init();
   }
 
+#if LOG_SD
   // see if the card is present and can be initialized:
   if (!SD.begin(PIN_SD_CHIP_SELECT)) {
-    Serial.println("SD Card Missing!!! Logging Disabled");
-    logEnable = false;
+    Serial.print("SD error code ");
+    Serial.println(SD.card.errorCode());
+    while(true);
   }
   else {
+    SD.remove(SD_LOG_FILE); // Delete and recreate instead of append
     loggerFile = SD.open(SD_LOG_FILE, FILE_WRITE);
+    if(!loggerFile){
+      Serial.print("SD failed to open ");
+      Serial.println(SD_LOG_FILE);
+      while(true);
+    }
     Serial.print("SD Card Initialized. Logging to ");
     Serial.println(SD_LOG_FILE);
   }
+#endif
 }
+
+#if LOG_SD
+void logSDEvent(char type, unsigned long t, unsigned int count, ...){
+  loggerFile.write(type);
+  loggerFile.write(',');
+  loggerFile.print(t);
+  va_list vals;
+  va_start(vals, count);
+  for (unsigned int i = 0; i < count; ++i) {
+    loggerFile.write(',');
+    // This needs to be read as a double because apparently (...) implies type promotion?
+    loggerFile.print(va_arg(vals, double));
+  }
+  va_end(vals);
+  loggerFile.write('\n');
+}
+#endif
 
 void loop() {
   if(gps_flag){
-    if(logEnable){
-      loggerFile.write('1');
-      loggerFile.write(',');
-      loggerFile.print(gps.location.lat());
-      loggerFile.write(',');
-      loggerFile.println(gps.location.lng());
-    }
-    packetizer.sendGPS(gps.location.lat(), gps.location.lng());
+    float lat = gps.location.lat();
+    float lng = gps.location.lng();
+    unsigned long t = millis();
+    #if LOG_SD
+      logSDEvent('1',t,2,lat, lng);
+      loggerFile.flush();
+    #endif
+    packetizer.sendGPS(lat,lng);
     gps_flag=0;
   }
   if(accel_flag){
     LSM::AccelGyroData dat = LSM::CheckAndRead();
+    unsigned long t = millis();
     float x_mpsps = dat.accel.x*LSM::ACCEL_TO_MPSPS;
     float y_mpsps = dat.accel.y*LSM::ACCEL_TO_MPSPS;
     float z_mpsps = dat.accel.z*LSM::ACCEL_TO_MPSPS;
@@ -141,36 +179,22 @@ void loop() {
     float y_dps = dat.gyro.y*LSM::GYRO_TO_DPS;
     float z_dps = dat.gyro.z*LSM::GYRO_TO_DPS;
 
-    if(logEnable){
-      loggerFile.write('3');
-      loggerFile.write(',');
-      loggerFile.print(x_mpsps);
-      loggerFile.write(',');
-      loggerFile.print(y_mpsps);
-      loggerFile.write(',');
-      loggerFile.print(z_mpsps);
-      loggerFile.write(',');
-      loggerFile.print(x_dps);
-      loggerFile.write(',');
-      loggerFile.print(y_dps);
-      loggerFile.write(',');
-      loggerFile.println(z_dps);
-    }
+    #if LOG_SD
+      logSDEvent('3',t,6,x_mpsps,y_mpsps,z_mpsps,x_dps,y_dps,z_dps);
+    #endif
     
     packetizer.sendAccel(x_mpsps, y_mpsps, z_mpsps, x_dps, y_dps, z_dps);
     accel_flag=0;
   }
   if(alt_flag){
     MPL::AltTempData dat = MPL::CheckAndRead();
+    unsigned long t = millis();
     float alt_m = dat.alt*MPL::ALT_TO_M;
     float temp_c = dat.temp*MPL::TEMP_TO_C;
-    if(logEnable){
-      loggerFile.write('2');
-      loggerFile.write(',');
-      loggerFile.print(alt_m);
-      loggerFile.write(',');
-      loggerFile.println(temp_c);
-    }
+
+    #if LOG_SD
+      logSDEvent('2',t,2,alt_m,temp_c);
+    #endif
     
     packetizer.sendAltitude(alt_m, temp_c);
     MPL::RequestData();
