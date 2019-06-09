@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.2.2">
+<eagle version="9.4.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
+<grid distance="0.5" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.1" altunitdist="mm" altunit="mm"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="yes"/>
@@ -113,12 +113,13 @@
 <wire x1="-1.5" y1="2.5" x2="1.5" y2="2.5" width="0.127" layer="21"/>
 <wire x1="-1.5" y1="-2.5" x2="1.5" y2="-2.5" width="0.127" layer="21"/>
 <text x="-1.5" y="3" size="1.27" layer="21">&gt;NAME</text>
+<circle x="0" y="-1.2" radius="0.125" width="0.25" layer="21"/>
 </package>
 <package name="TACT_SW_4.5MM">
-<smd name="P$1" x="-2.625" y="1.6" dx="1.55" dy="1" layer="1"/>
-<smd name="P$2" x="-2.625" y="-1.6" dx="1.55" dy="1" layer="1"/>
-<smd name="P$3" x="2.625" y="1.6" dx="1.55" dy="1" layer="1"/>
-<smd name="P$4" x="2.625" y="-1.6" dx="1.55" dy="1" layer="1"/>
+<smd name="P1@1" x="-2.625" y="1.6" dx="1.55" dy="1" layer="1"/>
+<smd name="P2@1" x="-2.625" y="-1.6" dx="1.55" dy="1" layer="1"/>
+<smd name="P1@2" x="2.625" y="1.6" dx="1.55" dy="1" layer="1"/>
+<smd name="P2@2" x="2.625" y="-1.6" dx="1.55" dy="1" layer="1"/>
 <wire x1="-2.25" y1="0.75" x2="-2.25" y2="-0.75" width="0.127" layer="21"/>
 <wire x1="2.25" y1="0.75" x2="2.25" y2="-0.75" width="0.127" layer="21"/>
 <wire x1="-1.5" y1="-2.25" x2="1.5" y2="-2.25" width="0.127" layer="21"/>
@@ -684,8 +685,6 @@ Source: http://www.maxstream.net/products/xbee/datasheet_XBee_OEM_RF-Modules.pdf
 <text x="-2.54" y="-10.16" size="2.54" layer="94">&gt;VALUE</text>
 </symbol>
 <symbol name="NORMOPEN">
-<wire x1="-2.54" y1="0" x2="-2.54" y2="-2.54" width="0.1524" layer="94"/>
-<wire x1="5.08" y1="0" x2="5.08" y2="-2.54" width="0.1524" layer="94"/>
 <wire x1="-1.27" y1="0" x2="3.048" y2="1.778" width="0.2032" layer="94"/>
 <wire x1="3.048" y1="0.508" x2="3.048" y2="0" width="0.2032" layer="94"/>
 <wire x1="0.762" y1="1.016" x2="0.762" y2="1.524" width="0.2032" layer="94"/>
@@ -698,12 +697,8 @@ Source: http://www.maxstream.net/products/xbee/datasheet_XBee_OEM_RF-Modules.pdf
 <wire x1="0.762" y1="2.794" x2="1.27" y2="2.286" width="0.1524" layer="94"/>
 <wire x1="-2.54" y1="0" x2="-1.27" y2="0" width="0.2032" layer="94"/>
 <wire x1="3.048" y1="0" x2="5.08" y2="0" width="0.2032" layer="94"/>
-<circle x="-2.54" y="0" radius="0.508" width="0" layer="94"/>
-<circle x="5.08" y="0" radius="0.508" width="0" layer="94"/>
 <text x="-3.048" y="4.826" size="1.778" layer="95">&gt;NAME</text>
 <pin name="0@A" x="-5.08" y="0" visible="off" length="short" direction="pas" swaplevel="1"/>
-<pin name="0@B" x="-5.08" y="-2.54" visible="off" length="short" direction="pas" swaplevel="1"/>
-<pin name="1@B" x="7.62" y="-2.54" visible="off" length="short" direction="pas" swaplevel="2" rot="R180"/>
 <pin name="1@A" x="7.62" y="0" visible="off" length="short" direction="pas" swaplevel="2" rot="R180"/>
 </symbol>
 <symbol name="M20048-1">
@@ -935,10 +930,8 @@ Source: http://www.maxstream.net/products/xbee/datasheet_XBee_OEM_RF-Modules.pdf
 <devices>
 <device name="" package="TACT_SW_4.5MM">
 <connects>
-<connect gate="G$1" pin="0@A" pad="P$1"/>
-<connect gate="G$1" pin="0@B" pad="P$2"/>
-<connect gate="G$1" pin="1@A" pad="P$3"/>
-<connect gate="G$1" pin="1@B" pad="P$4"/>
+<connect gate="G$1" pin="0@A" pad="P1@1 P1@2" route="any"/>
+<connect gate="G$1" pin="1@A" pad="P2@1 P2@2" route="any"/>
 </connects>
 <technologies>
 <technology name=""/>
