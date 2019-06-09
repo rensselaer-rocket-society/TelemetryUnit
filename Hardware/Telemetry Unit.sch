@@ -9421,29 +9421,6 @@ Source: avr.lbr</description>
 <rectangle x1="-0.8382" y1="-0.4318" x2="-0.4318" y2="0.4318" layer="51"/>
 <rectangle x1="-0.1999" y1="-0.4001" x2="0.1999" y2="0.4001" layer="35"/>
 </package>
-<package name="TSOT23-6" urn="urn:adsk.eagle:footprint:16038/1" locally_modified="yes">
-<description>&lt;b&gt;S6 Package 6-Lead Plastic TSOT-23&lt;/b&gt;&lt;p&gt;
-Source: http://cds.linear.com/docs/Datasheet/623012fb.pdf</description>
-<wire x1="1.422" y1="-0.781" x2="-1.423" y2="-0.781" width="0.1524" layer="51"/>
-<wire x1="-1.423" y1="-0.781" x2="-1.423" y2="0.781" width="0.1524" layer="21"/>
-<wire x1="-1.423" y1="0.781" x2="1.422" y2="0.781" width="0.1524" layer="51"/>
-<wire x1="1.422" y1="0.781" x2="1.422" y2="-0.781" width="0.1524" layer="21"/>
-<circle x="-1.15" y="-0.5" radius="0.1" width="0" layer="21"/>
-<smd name="1" x="-0.95" y="-1.3" dx="0.62" dy="1.22" layer="1"/>
-<smd name="2" x="0" y="-1.3" dx="0.62" dy="1.22" layer="1"/>
-<smd name="3" x="0.95" y="-1.3" dx="0.62" dy="1.22" layer="1"/>
-<smd name="4" x="0.95" y="1.3" dx="0.62" dy="1.22" layer="1"/>
-<smd name="5" x="0" y="1.3" dx="0.62" dy="1.22" layer="1"/>
-<smd name="6" x="-0.95" y="1.3" dx="0.62" dy="1.22" layer="1"/>
-<text x="2.8575" y="-1.5875" size="1.016" layer="27" ratio="10" rot="R90">&gt;VALUE</text>
-<text x="-1.5875" y="-1.5875" size="1.016" layer="25" ratio="10" rot="R90">&gt;NAME</text>
-<rectangle x1="-1.175" y1="-1.4" x2="-0.725" y2="-0.8" layer="51"/>
-<rectangle x1="-0.225" y1="-1.4" x2="0.225" y2="-0.8" layer="51"/>
-<rectangle x1="0.725" y1="-1.4" x2="1.175" y2="-0.8" layer="51"/>
-<rectangle x1="0.725" y1="0.8" x2="1.175" y2="1.4" layer="51"/>
-<rectangle x1="-0.225" y1="0.8" x2="0.225" y2="1.4" layer="51"/>
-<rectangle x1="-1.175" y1="0.8" x2="-0.725" y2="1.4" layer="51"/>
-</package>
 <package name="L1210" urn="urn:adsk.eagle:footprint:23049/1" locally_modified="yes">
 <description>&lt;b&gt;RESISTOR&lt;/b&gt;</description>
 <wire x1="-0.913" y1="1.219" x2="0.939" y2="1.219" width="0.1524" layer="51"/>
@@ -9886,6 +9863,29 @@ Source: http://www.maxstream.net/products/xbee/datasheet_XBee_OEM_RF-Modules.pdf
 <circle x="0" y="0" radius="1.25" width="0.127" layer="21"/>
 <text x="-3" y="2.5" size="1.27" layer="21">&gt;NAME</text>
 </package>
+<package name="TSOT23-6" urn="urn:adsk.eagle:footprint:16038/1" locally_modified="yes">
+<description>&lt;b&gt;S6 Package 6-Lead Plastic TSOT-23&lt;/b&gt;&lt;p&gt;
+Source: http://cds.linear.com/docs/Datasheet/623012fb.pdf</description>
+<wire x1="1.422" y1="-0.781" x2="-1.423" y2="-0.781" width="0.1524" layer="51"/>
+<wire x1="-1.423" y1="-0.781" x2="-1.423" y2="0.781" width="0.1524" layer="21"/>
+<wire x1="-1.423" y1="0.781" x2="1.422" y2="0.781" width="0.1524" layer="51"/>
+<wire x1="1.422" y1="0.781" x2="1.422" y2="-0.781" width="0.1524" layer="21"/>
+<circle x="-1.15" y="-0.5" radius="0.1" width="0" layer="21"/>
+<smd name="1" x="-0.95" y="-1.3" dx="0.62" dy="1.22" layer="1"/>
+<smd name="2" x="0" y="-1.3" dx="0.62" dy="1.22" layer="1"/>
+<smd name="3" x="0.95" y="-1.3" dx="0.62" dy="1.22" layer="1"/>
+<smd name="4" x="0.95" y="1.3" dx="0.62" dy="1.22" layer="1"/>
+<smd name="5" x="0" y="1.3" dx="0.62" dy="1.22" layer="1"/>
+<smd name="6" x="-0.95" y="1.3" dx="0.62" dy="1.22" layer="1"/>
+<text x="2.8575" y="-1.5875" size="1.016" layer="27" ratio="10" rot="R90">&gt;VALUE</text>
+<text x="-1.5875" y="-1.5875" size="1.016" layer="25" ratio="10" rot="R90">&gt;NAME</text>
+<rectangle x1="-1.175" y1="-1.4" x2="-0.725" y2="-0.8" layer="51"/>
+<rectangle x1="-0.225" y1="-1.4" x2="0.225" y2="-0.8" layer="51"/>
+<rectangle x1="0.725" y1="-1.4" x2="1.175" y2="-0.8" layer="51"/>
+<rectangle x1="0.725" y1="0.8" x2="1.175" y2="1.4" layer="51"/>
+<rectangle x1="-0.225" y1="0.8" x2="0.225" y2="1.4" layer="51"/>
+<rectangle x1="-1.175" y1="0.8" x2="-0.725" y2="1.4" layer="51"/>
+</package>
 </packages>
 <packages3d>
 <package3d name="XBEE" urn="urn:adsk.eagle:package:18007/1" locally_modified="yes" type="box">
@@ -9953,19 +9953,6 @@ Source: http://www.maxstream.net/products/xbee/datasheet_XBee_OEM_RF-Modules.pdf
 <text x="3.81" y="-5.08" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
 <pin name="2" x="0" y="-7.62" visible="off" length="short" direction="pas" swaplevel="1" rot="R90"/>
 <pin name="1" x="0" y="7.62" visible="off" length="short" direction="pas" swaplevel="1" rot="R270"/>
-</symbol>
-<symbol name="SWITCH_REG">
-<wire x1="-7.62" y1="7.62" x2="-7.62" y2="-10.16" width="0.254" layer="94"/>
-<wire x1="-7.62" y1="-10.16" x2="7.62" y2="-10.16" width="0.254" layer="94"/>
-<wire x1="7.62" y1="-10.16" x2="7.62" y2="7.62" width="0.254" layer="94"/>
-<wire x1="7.62" y1="7.62" x2="-7.62" y2="7.62" width="0.254" layer="94"/>
-<pin name="VIN" x="-12.7" y="5.08" length="middle"/>
-<pin name="GND" x="0" y="-15.24" length="middle" rot="R90"/>
-<pin name="BST" x="12.7" y="5.08" length="middle" rot="R180"/>
-<pin name="FB" x="12.7" y="-5.08" length="middle" rot="R180"/>
-<pin name="SW" x="12.7" y="0" length="middle" rot="R180"/>
-<pin name="EN" x="-12.7" y="-5.08" length="middle"/>
-<text x="-7.62" y="8.382" size="1.27" layer="94">&gt;NAME</text>
 </symbol>
 <symbol name="MPL311A2">
 <pin name="VDD" x="-7.62" y="12.7" length="middle"/>
@@ -10055,6 +10042,19 @@ Source: http://www.maxstream.net/products/xbee/datasheet_XBee_OEM_RF-Modules.pdf
 <pin name="0@A" x="-5.08" y="0" visible="off" length="short" direction="pas" swaplevel="1"/>
 <pin name="1@A" x="7.62" y="0" visible="off" length="short" direction="pas" swaplevel="2" rot="R180"/>
 </symbol>
+<symbol name="SWITCH_REG">
+<wire x1="-7.62" y1="7.62" x2="-7.62" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="-10.16" x2="7.62" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="7.62" y1="-10.16" x2="7.62" y2="7.62" width="0.254" layer="94"/>
+<wire x1="7.62" y1="7.62" x2="-7.62" y2="7.62" width="0.254" layer="94"/>
+<pin name="VIN" x="-12.7" y="5.08" length="middle"/>
+<pin name="GND" x="0" y="-15.24" length="middle" rot="R90"/>
+<pin name="BST" x="12.7" y="5.08" length="middle" rot="R180"/>
+<pin name="FB" x="12.7" y="-5.08" length="middle" rot="R180"/>
+<pin name="LX" x="12.7" y="0" length="middle" rot="R180"/>
+<pin name="EN" x="-12.7" y="-5.08" length="middle"/>
+<text x="-7.62" y="8.382" size="1.27" layer="94">&gt;NAME</text>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="M20048-1" prefix="GPS">
@@ -10117,26 +10117,6 @@ Source: http://www.maxstream.net/products/xbee/datasheet_XBee_OEM_RF-Modules.pdf
 <connects>
 <connect gate="G$1" pin="1" pad="1"/>
 <connect gate="G$1" pin="2" pad="2"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-<deviceset name="AP65111A" prefix="U">
-<gates>
-<gate name="G$1" symbol="SWITCH_REG" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="TSOT23-6">
-<connects>
-<connect gate="G$1" pin="BST" pad="4"/>
-<connect gate="G$1" pin="EN" pad="5"/>
-<connect gate="G$1" pin="FB" pad="6"/>
-<connect gate="G$1" pin="GND" pad="2"/>
-<connect gate="G$1" pin="SW" pad="3"/>
-<connect gate="G$1" pin="VIN" pad="1"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -10292,6 +10272,26 @@ Source: MaxStream, Inc. xbee_productmanual.pdf</description>
 <connects>
 <connect gate="G$1" pin="0@A" pad="P1@1 P1@2" route="any"/>
 <connect gate="G$1" pin="1@A" pad="P2@1 P2@2" route="any"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="AOZ1280" prefix="U">
+<gates>
+<gate name="G$1" symbol="SWITCH_REG" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="TSOT23-6">
+<connects>
+<connect gate="G$1" pin="BST" pad="1"/>
+<connect gate="G$1" pin="EN" pad="4"/>
+<connect gate="G$1" pin="FB" pad="3"/>
+<connect gate="G$1" pin="GND" pad="2"/>
+<connect gate="G$1" pin="LX" pad="6"/>
+<connect gate="G$1" pin="VIN" pad="5"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -20435,14 +20435,12 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <part name="R3" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="30k"/>
 <part name="R6" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k"/>
 <part name="GND10" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="U2" library="TrackerPeripherals" deviceset="AP65111A" device=""/>
 <part name="L2" library="TrackerPeripherals" deviceset="L_SMALL" device="L1210" value="6.8u"/>
 <part name="R7" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="40.2k"/>
-<part name="R8" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="59k"/>
 <part name="R9" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="13k"/>
 <part name="+3V1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="R10" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="100k"/>
-<part name="C11" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-US" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="22p"/>
+<part name="C11" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-US" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="100n"/>
 <part name="C9" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-US" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="22u"/>
 <part name="C10" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-US" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="22u"/>
 <part name="PWR" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="SML0603" package3d_urn="urn:adsk.eagle:package:15832/1"/>
@@ -20485,6 +20483,8 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <part name="R16" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="330"/>
 <part name="GND20" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="S1" library="TrackerPeripherals" deviceset="TACT_SW_4.5MM" device=""/>
+<part name="D2" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD123" package3d_urn="urn:adsk.eagle:package:43420/1"/>
+<part name="U2" library="TrackerPeripherals" deviceset="AOZ1280" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -21617,9 +21617,6 @@ battery monitoring up to 10.24V</text>
 <plain>
 </plain>
 <instances>
-<instance part="U2" gate="G$1" x="0" y="25.4" smashed="yes">
-<attribute name="NAME" x="-7.62" y="33.782" size="1.27" layer="94"/>
-</instance>
 <instance part="L2" gate="G$1" x="33.02" y="25.4" smashed="yes" rot="R90">
 <attribute name="NAME" x="38.1" y="24.13" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="38.1" y="29.21" size="1.778" layer="96" rot="R180"/>
@@ -21627,10 +21624,6 @@ battery monitoring up to 10.24V</text>
 <instance part="R7" gate="G$1" x="43.18" y="20.32" smashed="yes" rot="R180">
 <attribute name="NAME" x="46.99" y="18.8214" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="46.99" y="23.622" size="1.778" layer="96" rot="R180"/>
-</instance>
-<instance part="R8" gate="G$1" x="22.86" y="20.32" smashed="yes">
-<attribute name="NAME" x="19.05" y="21.8186" size="1.778" layer="95"/>
-<attribute name="VALUE" x="19.05" y="17.018" size="1.778" layer="96"/>
 </instance>
 <instance part="R9" gate="G$1" x="33.02" y="7.62" smashed="yes" rot="R270">
 <attribute name="NAME" x="34.5186" y="11.43" size="1.778" layer="95" rot="R270"/>
@@ -21683,17 +21676,24 @@ battery monitoring up to 10.24V</text>
 <attribute name="NAME" x="-52.07" y="20.955" size="1.778" layer="95" rot="MR0"/>
 <attribute name="VALUE" x="-52.07" y="10.16" size="1.778" layer="96" rot="MR0"/>
 </instance>
+<instance part="D2" gate="G$1" x="22.86" y="10.16" smashed="yes" rot="R90">
+<attribute name="NAME" x="22.3774" y="12.7" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="25.1714" y="12.7" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="U2" gate="G$1" x="0" y="25.4" smashed="yes">
+<attribute name="NAME" x="-7.62" y="33.782" size="1.27" layer="94"/>
+</instance>
 </instances>
 <busses>
 </busses>
 <nets>
 <net name="GND" class="0">
 <segment>
-<pinref part="U2" gate="G$1" pin="GND"/>
 <wire x1="0" y1="10.16" x2="0" y2="0" width="0.1524" layer="91"/>
 <wire x1="0" y1="0" x2="-27.94" y2="0" width="0.1524" layer="91"/>
 <junction x="0" y="0"/>
-<wire x1="0" y1="0" x2="33.02" y2="0" width="0.1524" layer="91"/>
+<wire x1="0" y1="0" x2="22.86" y2="0" width="0.1524" layer="91"/>
+<wire x1="22.86" y1="0" x2="33.02" y2="0" width="0.1524" layer="91"/>
 <wire x1="33.02" y1="0" x2="33.02" y2="2.54" width="0.1524" layer="91"/>
 <pinref part="R9" gate="G$1" pin="2"/>
 <wire x1="33.02" y1="0" x2="50.8" y2="0" width="0.1524" layer="91"/>
@@ -21714,6 +21714,10 @@ battery monitoring up to 10.24V</text>
 <pinref part="J1" gate="G$1" pin="2"/>
 <wire x1="-55.88" y1="15.24" x2="-48.26" y2="15.24" width="0.1524" layer="91"/>
 <wire x1="-48.26" y1="15.24" x2="-48.26" y2="0" width="0.1524" layer="91"/>
+<pinref part="D2" gate="G$1" pin="A"/>
+<wire x1="22.86" y1="7.62" x2="22.86" y2="0" width="0.1524" layer="91"/>
+<junction x="22.86" y="0"/>
+<pinref part="U2" gate="G$1" pin="GND"/>
 </segment>
 <segment>
 <wire x1="83.82" y1="2.54" x2="83.82" y2="0" width="0.1524" layer="91"/>
@@ -21723,21 +21727,26 @@ battery monitoring up to 10.24V</text>
 </net>
 <net name="N$10" class="0">
 <segment>
-<pinref part="R8" gate="G$1" pin="1"/>
-<pinref part="U2" gate="G$1" pin="FB"/>
 <wire x1="17.78" y1="20.32" x2="12.7" y2="20.32" width="0.1524" layer="91"/>
+<pinref part="R7" gate="G$1" pin="2"/>
+<wire x1="27.94" y1="20.32" x2="33.02" y2="20.32" width="0.1524" layer="91"/>
+<pinref part="R9" gate="G$1" pin="1"/>
+<wire x1="33.02" y1="20.32" x2="38.1" y2="20.32" width="0.1524" layer="91"/>
+<wire x1="33.02" y1="12.7" x2="33.02" y2="20.32" width="0.1524" layer="91"/>
+<junction x="33.02" y="20.32"/>
+<wire x1="17.78" y1="20.32" x2="27.94" y2="20.32" width="0.1524" layer="91"/>
+<pinref part="U2" gate="G$1" pin="FB"/>
 </segment>
 </net>
 <net name="N$9" class="0">
 <segment>
-<pinref part="U2" gate="G$1" pin="EN"/>
 <pinref part="R10" gate="G$1" pin="2"/>
 <wire x1="-12.7" y1="20.32" x2="-17.78" y2="20.32" width="0.1524" layer="91"/>
+<pinref part="U2" gate="G$1" pin="EN"/>
 </segment>
 </net>
 <net name="VBAT" class="0">
 <segment>
-<pinref part="U2" gate="G$1" pin="VIN"/>
 <pinref part="R10" gate="G$1" pin="1"/>
 <wire x1="-12.7" y1="30.48" x2="-17.78" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="-17.78" y1="30.48" x2="-27.94" y2="30.48" width="0.1524" layer="91"/>
@@ -21754,41 +21763,33 @@ battery monitoring up to 10.24V</text>
 <pinref part="J1" gate="G$1" pin="1"/>
 <wire x1="-55.88" y1="17.78" x2="-48.26" y2="17.78" width="0.1524" layer="91"/>
 <wire x1="-48.26" y1="17.78" x2="-48.26" y2="30.48" width="0.1524" layer="91"/>
+<pinref part="U2" gate="G$1" pin="VIN"/>
 </segment>
 </net>
 <net name="N$12" class="0">
 <segment>
 <pinref part="C11" gate="G$1" pin="1"/>
-<pinref part="U2" gate="G$1" pin="BST"/>
 <wire x1="15.24" y1="30.48" x2="12.7" y2="30.48" width="0.1524" layer="91"/>
+<pinref part="U2" gate="G$1" pin="BST"/>
 </segment>
 </net>
 <net name="N$7" class="0">
 <segment>
-<pinref part="U2" gate="G$1" pin="SW"/>
 <pinref part="L2" gate="G$1" pin="1"/>
 <wire x1="12.7" y1="25.4" x2="22.86" y2="25.4" width="0.1524" layer="91"/>
 <pinref part="C11" gate="G$1" pin="2"/>
 <wire x1="22.86" y1="25.4" x2="25.4" y2="25.4" width="0.1524" layer="91"/>
 <wire x1="22.86" y1="30.48" x2="22.86" y2="25.4" width="0.1524" layer="91"/>
 <junction x="22.86" y="25.4"/>
+<pinref part="D2" gate="G$1" pin="C"/>
+<wire x1="22.86" y1="12.7" x2="22.86" y2="25.4" width="0.1524" layer="91"/>
+<pinref part="U2" gate="G$1" pin="LX"/>
 </segment>
 </net>
 <net name="N$14" class="0">
 <segment>
 <pinref part="R11" gate="G$1" pin="2"/>
 <pinref part="PWR" gate="G$1" pin="A"/>
-</segment>
-</net>
-<net name="N$8" class="0">
-<segment>
-<pinref part="R8" gate="G$1" pin="2"/>
-<pinref part="R7" gate="G$1" pin="2"/>
-<wire x1="27.94" y1="20.32" x2="33.02" y2="20.32" width="0.1524" layer="91"/>
-<pinref part="R9" gate="G$1" pin="1"/>
-<wire x1="33.02" y1="20.32" x2="38.1" y2="20.32" width="0.1524" layer="91"/>
-<wire x1="33.02" y1="12.7" x2="33.02" y2="20.32" width="0.1524" layer="91"/>
-<junction x="33.02" y="20.32"/>
 </segment>
 </net>
 <net name="+3V3" class="0">
@@ -21838,13 +21839,14 @@ battery monitoring up to 10.24V</text>
 <approved hash="202,1,25.4,58.42,IC1,PEN,,,,"/>
 <approved hash="104,1,152.4,104.14,J2,VDD,+3V3,,,"/>
 <approved hash="104,1,152.4,99.06,J2,VSS,GND,,,"/>
-<approved hash="104,4,-22.86,76.2,IC2,VCC,+3V3,,,"/>
+<approved hash="104,4,-22.86,76.2,IC2,VCC,V_USB,,,"/>
 <approved hash="202,4,-22.86,63.5,IC2,OSCI,,,,"/>
 <approved hash="202,4,5.08,68.58,IC2,!CTS,,,,"/>
 <approved hash="202,4,5.08,63.5,IC2,!DSR,,,,"/>
 <approved hash="202,4,5.08,60.96,IC2,!DCD,,,,"/>
 <approved hash="202,4,5.08,58.42,IC2,!RI,,,,"/>
 <approved hash="104,4,-22.86,73.66,IC2,VCCIO,+3V3,,,"/>
+<approved hash="202,4,-22.86,68.58,IC2,!RESET,,,,"/>
 <approved hash="113,2,71.4417,19.05,FIX,,,,,"/>
 <approved hash="113,5,84.1417,6.35,PWR,,,,,"/>
 <approved hash="113,5,-55.88,31.0617,D1,,,,,"/>
@@ -21852,7 +21854,7 @@ battery monitoring up to 10.24V</text>
 <approved hash="113,4,19.9983,34.29,RX,,,,,"/>
 <approved hash="113,4,30.1583,34.29,TX,,,,,"/>
 <approved hash="113,4,-74.9723,31.9761,JP1,,,,,"/>
-<approved hash="115,1,22.86,118.11,RST2,,,,,"/>
+<approved hash="113,5,22.2783,10.16,D2,,,,,"/>
 </errors>
 </schematic>
 </drawing>
