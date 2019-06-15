@@ -10,9 +10,10 @@ import struct
 from fixedint import UInt8
 
 # Correspondance by packet type ID [None, GPS, Alt, Accel]
-GPS_DATA_FORMAT = '<ff'
-ALTIMETER_DATA_FORMAT = '<ff'
-ACCEL_DATA_FORMAT = '<ffffff'
+GPS_DATA_FORMAT = '<Iff'
+ALTIMETER_DATA_FORMAT = '<Iih'
+ACCEL_DATA_FORMAT = '<Ihhhhhh'
+BATTERY_DATA_FORMAT = '<IH'
 PACKET_HEADER_FORMAT = '<BBB'
 
 class DecoderThread(threading.Thread):
@@ -21,8 +22,8 @@ class DecoderThread(threading.Thread):
 		self.ser_port = ser_port
 		self.telemetry = teleManager
 
-	def decode_GPS(self,t,data):
-		lat, lng = struct.unpack(GPS_DATA_FORMAT, data)
+	def decode_GPS(self,data):
+		t, lat, lng = struct.unpack(GPS_DATA_FORMAT, data)
 		self.telemetry.logEvents([{
 					"id": "gps",
 					"timestamp": t,
@@ -30,33 +31,43 @@ class DecoderThread(threading.Thread):
 					"longitude": lng
 				}])
 
-	def decode_Alt(self,t,data):
-		alt, temp = struct.unpack(ALTIMETER_DATA_FORMAT, data)
+	def decode_Alt(self,data):
+		t, alt, temp = struct.unpack(ALTIMETER_DATA_FORMAT, data)
 		self.telemetry.logEvents([{
 					"id": "altitude",
 					"timestamp": t,
-					"altitude": alt
+					"altitude": alt/16.0
 				},{
 					"id": "temp",
 					"timestamp": t,
-					"temp": temp
+					"temp": temp/16.0
 				}])
 
-	def decode_Accel(self,t,data):
-		accelx, accely, accelz, gyrox, gyroy, gyroz = struct.unpack(ACCEL_DATA_FORMAT, data)
+	def decode_Accel(self,data):
+		t, accelx, accely, accelz, gyrox, gyroy, gyroz = struct.unpack(ACCEL_DATA_FORMAT, data)
+		accel_to_mpsps = 0.004788
+		gyro_to_dps = 0.0175
 		self.telemetry.logEvents([
-			{"id":"accelx", "timestamp":t, "accelx":accelx },
-			{"id":"accely", "timestamp":t, "accely":accely },
-			{"id":"accelz", "timestamp":t, "accelz":accelz },
-			{"id":"gyrox",  "timestamp":t, "gyrox":gyrox },
-			{"id":"gyroy",  "timestamp":t, "gyroy":gyroy },
-			{"id":"gyroz",  "timestamp":t, "gyroz":gyroz }
+			{"id":"accelx", "timestamp":t, "accelx":accelx*accel_to_mpsps },
+			{"id":"accely", "timestamp":t, "accely":accely*accel_to_mpsps },
+			{"id":"accelz", "timestamp":t, "accelz":accelz*accel_to_mpsps },
+			{"id":"gyrox",  "timestamp":t, "gyrox":gyrox*gyro_to_dps },
+			{"id":"gyroy",  "timestamp":t, "gyroy":gyroy*gyro_to_dps },
+			{"id":"gyroz",  "timestamp":t, "gyroz":gyroz*gyro_to_dps }
 		])
+
+	def decode_Battery(self, data):
+		t, centivolts = struct.unpack(BATTERY_DATA_FORMAT, data)
+		self.telemetry.logEvents([{
+				"id": "battery",
+				"timestamp": t,
+				"volts": centivolts/100.0
+			}])
 
 	def getSerial(self):
 		while 1:
 			try:
-				stream = serial.Serial(self.ser_port,115200)
+				stream = serial.Serial(self.ser_port,38400)
 				return stream
 			except:
 				continue
@@ -71,8 +82,6 @@ class DecoderThread(threading.Thread):
 
 		stream = self.getSerial()
 
-		t0 = time.perf_counter()
-
 		while 1:
 			try:
 				newbyte = stream.read(1);
@@ -86,7 +95,6 @@ class DecoderThread(threading.Thread):
 			if newbyte != 0:
 				packetBuffer.append(newbyte)
 			else:
-				t = (time.perf_counter()-t0)*1000 # Capture arrival time (ms)
 				try:
 					packet_decoded = cobs.decode(packetBuffer) # Clear out buffer after try/catch since this could fail
 					p_type, p_len, p_seq = struct.unpack(PACKET_HEADER_FORMAT, packet_decoded[:3])
@@ -94,7 +102,7 @@ class DecoderThread(threading.Thread):
 					# Header inconsistency detection
 					if(p_seq != next_seq):
 						missed = p_seq-next_seq
-						print("[{:.2f}]\tMissed {} packets!".format(t,missed))
+						print("Missed {} packets!".format(missed))
 						drops += missed
 
 					next_seq = UInt8(p_seq)+1 # Need fixed width to handle wraparound
@@ -112,16 +120,18 @@ class DecoderThread(threading.Thread):
 
 					data_bytes = packet_decoded[3:-1]
 					if(p_type == 1):
-						self.decode_GPS(t,data_bytes)
+						self.decode_GPS(data_bytes)
 					elif(p_type == 2):
-						self.decode_Alt(t,data_bytes)
+						self.decode_Alt(data_bytes)
 					elif(p_type == 3):
-						self.decode_Accel(t,data_bytes)
+						self.decode_Accel(data_bytes)
+					elif(p_type == 4):
+						self.decode_Battery(data_bytes)
 					else:
-						print("[{:.2f}]\tUnrecognized packet type {}!".format(t,p_type))
+						print("Unrecognized packet type {}!".format(p_type))
 
 				except Exception as e:
-					print("[{:.2f}]\tError: {} --- {}".format(t,e,packetBuffer.hex()))
+					print("Error: {} --- {}".format(e,packetBuffer.hex()))
 					errors += 1
 
 				del packetBuffer[:] # Clear out buffer

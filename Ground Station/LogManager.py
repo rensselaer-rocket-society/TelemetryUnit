@@ -79,6 +79,11 @@ class TelemetryManager:
 				str(self.eventlogs["gyroz"][i].data["gyroz"]) + '\n'
 			self.datalock.release()
 			f.write(outstr)
+		for i in range(len(self.eventlogs.get("battery",[]))):
+			self.datalock.acquire()
+			voltage = self.eventlogs["battery"][i]
+			self.datalock.release()
+			f.write('4,' + str(voltage.time) + ',' + str(voltage.data['volts']) + '\n')
 		self.fileiolock.release()
 
 	def restoreFromDisk(self,filename):
@@ -100,4 +105,6 @@ class TelemetryManager:
 				self._logEvent({"id":"gyrox",  "timestamp":t, "gyrox": float(vals[5])})
 				self._logEvent({"id":"gyroy",  "timestamp":t, "gyroy": float(vals[6])})
 				self._logEvent({"id":"gyroz",  "timestamp":t, "gyroz": float(vals[7])})
+			elif type == '4': # Battery
+				self._logEvent({"id":"battery", "timestamp":t, "volts": float(vals[2])})
 		self.fileiolock.release()
