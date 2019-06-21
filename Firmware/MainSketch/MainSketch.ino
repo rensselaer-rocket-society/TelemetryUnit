@@ -4,7 +4,7 @@
 #include <TinyGPS++.h>
 #include <stdarg.h>
 
-#define LOG_SD 0
+#define LOG_SD 1
 #define TX_XBEE 1
 
 #if LOG_SD
@@ -35,7 +35,7 @@ void USART1Init() { // Manually configure USART1 so we can use interrupts to fee
   UBRR1 = 64; // Set baud rate to 9600 ((10MHz/(16*9600Hz)-1 ~= 64)
   UCSR1B = 0x98; // Enable receive interrupts, receiver, and transmitter
   // Other initial values are okay (8-bit 1-stop no parity)
-   UCSR1B |= 0x20;
+  UCSR1B |= 0x20; //Enable data ready interupts (start transmission of cold reset
 }
 
 bool gps_flag, accel_flag, alt_flag, bat_flag;
@@ -70,7 +70,6 @@ ISR(TIMER2_OVF_vect) { // Runs every 6.5536 ms
   if(++bat_counter >= 1526) { // Set every 10s
     bat_flag=1;
     bat_counter=0;
-//    UCSR1B |= 0x20; //Transmit reset
   }
 }
 
@@ -78,7 +77,7 @@ ISR(USART1_RX_vect) { // Feed GPS UART data to parser
   char data = UDR1;
   gps.encode(data);
 }
-ISR(USART1_UDRE_vect) {
+ISR(USART1_UDRE_vect) { // Send GPS cold restart at power up
   const static char PMTK_CMD[] = "$PMTK104*37\r\n";
   static uint16_t transmit_char = 0;
   if(PMTK_CMD[transmit_char] != '\0'){
@@ -144,7 +143,7 @@ void setup() {
     while(true);
   }
   else {
-    SD.remove(SD_LOG_FILE); // Delete and recreate instead of append
+//    SD.remove(SD_LOG_FILE); // Delete and recreate instead of append
     loggerFile = SD.open(SD_LOG_FILE, FILE_WRITE);
     if(!loggerFile){
       Serial.print("SD failed to open ");
