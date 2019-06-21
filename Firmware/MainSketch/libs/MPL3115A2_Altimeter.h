@@ -4,10 +4,12 @@
 #include <I2C.h>
 
 namespace MPL{
+	const float ALT_TO_M = 1.0/16.0;
+	const float TEMP_TO_C = 1.0/16.0;
 
 	const uint8_t I2C_ADDR = 0x60; //APPARENTLY I2C Library doesn't want shifted address
 
-	const uint8_t REG_STATUS = 0x06;
+	const uint8_t REG_STATUS = 0x00;
 	const uint8_t REG_OUT_P = 0x01;
 	const uint8_t REG_OUT_T = 0x04;
 	const uint8_t REG_SYSMOD = 0x11;
@@ -16,8 +18,8 @@ namespace MPL{
 	const uint8_t REG_OFF_H = 0x2D;
 
 	struct AltTempData {
-		uint32_t alt; //In 16ths of a meter
-		uint16_t temp; //In 16ths of a degree Celsius
+		int32_t alt; //In 16ths of a meter
+		int16_t temp; //In 16ths of a degree Celsius
 	};
 
 	const uint8_t BASE_CTRL = 0xA8; //Altimeter mode, 32x oversample (130ms/samp)
@@ -25,29 +27,25 @@ namespace MPL{
 
 	AltTempData decode(uint8_t* raw){
 		AltTempData ret;
-		ret.alt = ((uint32_t)raw[2]>>4)|((uint32_t)raw[1]<<4)|((uint32_t)raw[0]<<12);
-		ret.temp = ((uint32_t)raw[4]>>4)|((uint32_t)raw[3]<<4);
+		ret.alt = ((uint32_t)raw[2]<<8)|((uint32_t)raw[1]<<16)|((uint32_t)raw[0]<<24);
+		ret.alt = ret.alt >> 12; //Shift back with sign extend
+		ret.temp = raw[4]|((uint16_t)raw[3]<<8);
+		ret.temp = ret.temp >> 4; //Shift back with sign extend
 		return ret;
 	}
 
 
-	AltTempData PresetRead() {
+	AltTempData ReadData() {
 		uint8_t raw[5];
-		//ASSUMES reg pointer already set
-		I2c.read(I2C_ADDR, 5, raw);
+		I2c.read(I2C_ADDR, REG_OUT_P, 5, raw);
 		return decode(raw);
 	}
 
-	AltTempData ReadData() {
-		I2c.write(I2C_ADDR, REG_OUT_P); //Set reg pointer
-		return PresetRead();
-	}
-
 	AltTempData CheckAndRead() {
-		uint8_t status;
-		I2c.read(I2C_ADDR, REG_STATUS, 1, &status);
-		if(status & 0x08){
-			return PresetRead();
+		uint8_t data[6];
+		I2c.read(I2C_ADDR, REG_STATUS, 6, data); //Status and data (maybe)
+		if(data[0] & 0x08){
+			return decode(data+1);
 		} else {
 			AltTempData ret;
 			memset(&ret, 0xFF, sizeof(ret));
@@ -60,7 +58,7 @@ namespace MPL{
 		do{
 			I2c.read(I2C_ADDR, REG_STATUS, 1, &status);
 		} while(!(status & 0x08));
-		return PresetRead();
+		return ReadData();
 	}
 
 	bool IsDataReady() {

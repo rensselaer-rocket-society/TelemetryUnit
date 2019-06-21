@@ -51,13 +51,13 @@
 							"hasFrame": true
 						},
 						"accelgraph": {
-							"position": [0, 3],
-							"dimensions": [18, 13],
+							"position": [0, 3.5],
+							"dimensions": [18, 12.75],
 							"hasFrame": true
 						},
 						"gyrograph": {
-							"position": [0, 16],
-							"dimensions": [18, 13],
+							"position": [0, 16.25],
+							"dimensions": [18, 12.75],
 							"hasFrame": true
 						},
 						"gpstab": {
@@ -72,7 +72,7 @@
 						},
 						"statusbox": {
 							"position": [0, 0],
-							"dimensions": [18, 3],
+							"dimensions": [18, 3.5],
 							"hasFrame": true
 						}
 					}
@@ -187,7 +187,7 @@
 			}
 		},
 		"statusbox": {
-			"layoutGrid": [64, 16],
+			"layoutGrid": [64, 18],
 			"composition": [{
 				"namespace": "rrs.mmd.measure",
 				"key": "accelx"
@@ -200,35 +200,15 @@
 			}, {
 				"namespace": "rrs.mmd.measure",
 				"key": "temp"
+			}, {
+				"namespace": "rrs.mmd.measure",
+				"key": "battery"
 			}],
 			"name": "Status Box",
 			"type": "telemetry.fixed",
 			"configuration": {
 				"fixed-display": {
 					"elements": [{
-						"fill": "transparent",
-						"stroke": "transparent",
-						"text": "Vertical Acceleration:",
-						"x": 0,
-						"y": 1,
-						"width": 2,
-						"height": 1,
-						"type": "fixed.text",
-						"useGrid": true,
-						"size": "13px"
-					}, {
-						"type": "fixed.telemetry",
-						"x": 2,
-						"y": 1,
-						"id": "rrs.mmd.measure:accely",
-						"stroke": "transparent",
-						"color": "",
-						"titled": false,
-						"width": 3,
-						"height": 1,
-						"useGrid": true,
-						"size": "13px"
-					}, {
 						"fill": "transparent",
 						"stroke": "transparent",
 						"text": "Current Altitude:",
@@ -244,6 +224,29 @@
 						"x": 2,
 						"y": 0,
 						"id": "rrs.mmd.measure:altitude",
+						"stroke": "transparent",
+						"color": "",
+						"titled": false,
+						"width": 3,
+						"height": 1,
+						"useGrid": true,
+						"size": "13px"
+					}, {
+						"fill": "transparent",
+						"stroke": "transparent",
+						"text": "Vertical Acceleration:",
+						"x": 0,
+						"y": 1,
+						"width": 2,
+						"height": 1,
+						"type": "fixed.text",
+						"useGrid": true,
+						"size": "13px"
+					}, {
+						"type": "fixed.telemetry",
+						"x": 2,
+						"y": 1,
+						"id": "rrs.mmd.measure:accely",
 						"stroke": "transparent",
 						"color": "",
 						"titled": false,
@@ -274,6 +277,29 @@
 						"height": 1,
 						"useGrid": true,
 						"size": "13px"
+					}, {
+						"fill": "transparent",
+						"stroke": "transparent",
+						"text": "Battery Voltage:",
+						"x": 0,
+						"y": 3,
+						"width": 2,
+						"height": 1,
+						"type": "fixed.text",
+						"useGrid": true,
+						"size": "13px"
+					}, {
+						"type":"fixed.telemetry",
+						"x":2,
+						"y":3,
+						"id":"rrs.mmd.measure:battery",
+						"stroke":"transparent",
+						"color":"",
+						"titled":false,
+						"width":3,
+						"height":1,
+						"useGrid":true,
+						"size":"13px"
 					}]
 				}
 			},

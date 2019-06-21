@@ -8,7 +8,8 @@ let folder_defs = [
 			{namespace:"rrs.mmd",key:"gyro"},
 			{namespace:"rrs.mmd.measure",key:"gps"},
 			{namespace:"rrs.mmd.measure",key:"altitude"},
-			{namespace:"rrs.mmd.measure",key:"temp"}
+			{namespace:"rrs.mmd.measure",key:"temp"},
+			{namespace:"rrs.mmd.measure",key:"battery"}
 		]
 	},
 	{
@@ -176,6 +177,21 @@ let telemetry_defs = [
 	        	key: "temp",
 	            name: "Temperature",
 	            units: "°C",
+	            format: "float",
+	            hints: {
+	                range: 1
+	            }
+	        }
+        ]
+	}, {
+		key: "battery",
+		name: "Main Battery",
+		location : "rrs.mmd:root",
+        values: [
+	        {
+	        	key: "volts",
+	            name: "Voltage",
+	            units: "V",
 	            format: "float",
 	            hints: {
 	                range: 1
