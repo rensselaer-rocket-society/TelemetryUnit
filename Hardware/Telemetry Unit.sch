@@ -20504,6 +20504,7 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <part name="U3" library="TrackerPeripherals" deviceset="ICM-20649" device=""/>
 <part name="C12" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-US" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="100n"/>
 <part name="C13" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-US" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="100n"/>
+<part name="R8" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="0"/>
 </parts>
 <sheets>
 <sheet>
@@ -20948,6 +20949,10 @@ battery monitoring up to 10.24V</text>
 <instance part="GND9" gate="1" x="-20.32" y="45.72" smashed="yes">
 <attribute name="VALUE" x="-22.86" y="43.18" size="1.778" layer="96"/>
 </instance>
+<instance part="R8" gate="G$1" x="55.88" y="55.88" smashed="yes">
+<attribute name="NAME" x="52.07" y="57.3786" size="1.778" layer="95"/>
+<attribute name="VALUE" x="52.07" y="52.578" size="1.778" layer="96"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -21052,11 +21057,10 @@ battery monitoring up to 10.24V</text>
 <wire x1="71.12" y1="50.8" x2="73.66" y2="50.8" width="0.1524" layer="91"/>
 <pinref part="GND1" gate="1" pin="GND"/>
 <wire x1="73.66" y1="50.8" x2="73.66" y2="48.26" width="0.1524" layer="91"/>
-<pinref part="GPS1" gate="G$1" pin="AT1"/>
-<wire x1="45.72" y1="53.34" x2="45.72" y2="55.88" width="0.1524" layer="91"/>
-<wire x1="45.72" y1="55.88" x2="73.66" y2="55.88" width="0.1524" layer="91"/>
 <wire x1="73.66" y1="55.88" x2="73.66" y2="50.8" width="0.1524" layer="91"/>
 <junction x="73.66" y="50.8"/>
+<pinref part="R8" gate="G$1" pin="2"/>
+<wire x1="60.96" y1="55.88" x2="73.66" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="FIX" gate="G$1" pin="C"/>
@@ -21117,6 +21121,14 @@ battery monitoring up to 10.24V</text>
 <pinref part="GPS1" gate="G$1" pin="HW_S"/>
 <wire x1="2.54" y1="45.72" x2="-10.16" y2="45.72" width="0.1524" layer="91"/>
 <label x="-10.16" y="45.72" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$21" class="0">
+<segment>
+<pinref part="GPS1" gate="G$1" pin="AT1"/>
+<wire x1="45.72" y1="53.34" x2="45.72" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="R8" gate="G$1" pin="1"/>
+<wire x1="45.72" y1="55.88" x2="50.8" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
