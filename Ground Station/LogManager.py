@@ -1,5 +1,6 @@
 from bisect import bisect_left, bisect_right
 from threading import Lock
+import json
 
 class Event:
 	def __init__(self, time, obj):
@@ -8,6 +9,8 @@ class Event:
 	@classmethod
 	def fromJSON(cls, obj):
 		return Event(obj["timestamp"], obj)
+	def asJSON(self):
+		return json.dumps(self.data)
 	#Comparisons to allow bisect to do search by timestamp
 	def __lt__(self, e2):
 		return self.time < e2.time;
@@ -35,6 +38,14 @@ class TelemetryManager:
 		self.socket = socket
 		self.datalock = Lock()
 		self.fileiolock = Lock()
+		self.historyMask = (-float('inf'),float('inf'))
+
+	def updateHistoryMask(self, mint, maxt):
+		if mint is None:
+			mint = self.historyMask[0]
+		if maxt is None:
+			maxt = self.historyMask[1]
+		self.historyMask = (mint,maxt)
 
 	def _logEvent(self, e):
 		eventid = e["id"];
@@ -51,8 +62,11 @@ class TelemetryManager:
 
 	def serviceRequest(self, eventtype, mint, maxt):
 		if eventtype in self.eventlogs:
-			return extractRange(self.eventlogs[eventtype], mint, maxt)
+			return extractRange(self.eventlogs[eventtype], max(self.historyMask[0],mint), min(self.historyMask[1],maxt))
 		return []
+
+	def maxTime(self):
+		return max([dat[-1].time for _,dat in self.eventlogs.items()])
 
 	def saveToDisk(self,filename):
 		self.fileiolock.acquire()
@@ -108,3 +122,4 @@ class TelemetryManager:
 			elif type == '4': # Battery
 				self._logEvent({"id":"battery", "timestamp":t, "volts": float(vals[2])})
 		self.fileiolock.release()
+

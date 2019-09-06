@@ -3,6 +3,10 @@ from flask import Flask, request, jsonify, abort
 from flask_socketio import SocketIO
 from threading import Thread
 
+from PacketDecoder import DecoderThread
+from LogManager import TelemetryManager
+from LiveReplay import ReplayThread
+
 class FuncThread(Thread):
 	def __init__(self, target, *args):
 		super(FuncThread, self).__init__()
@@ -11,9 +15,6 @@ class FuncThread(Thread):
  
 	def run(self):
 		self._target(*self._args)
-
-from PacketDecoder import DecoderThread
-from LogManager import TelemetryManager
 
 app = Flask(__name__,
 			static_url_path='', 
@@ -44,6 +45,7 @@ if __name__ == '__main__':
 
 	view_args = subparse_list.add_parser('view', help='View the complete filght data from a saved log')
 	view_args.add_argument('logfile', help='Log archive to pull data from')
+	view_args.add_argument('--replay', action='store_true', help='Replay data from archive in real time as if it were coming from a real rocket')
 	view_args.set_defaults(view_only=True)
 
 	downlink_args = subparse_list.add_parser('downlink', help='Decode and display live telemetry from a Serial Port')
@@ -61,5 +63,8 @@ if __name__ == '__main__':
 		decoder.start()
 	else:
 		telemetry.restoreFromDisk(args.logfile)
+		if args.replay:
+			replay = ReplayThread(telemetry, True)
+			replay.start()
 
 	socketio.run(app, port=8000)

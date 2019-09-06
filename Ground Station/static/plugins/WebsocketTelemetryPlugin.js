@@ -30,7 +30,7 @@ function WebsocketTelemetryPlugin() {
             }
 
 		socket.on('telemetry', function(data) {
-            var latest = -1;
+            var latest = Number.MIN_SAFE_INTEGER;
             data.map(function (measurement) {
                 if(telemetry_listeners[measurement.id]){
                     telemetry_listeners[measurement.id](measurement);
@@ -40,6 +40,7 @@ function WebsocketTelemetryPlugin() {
                 }
             });
             if(latest > clock_time) clock.tick(latest);
+            else if(latest != Number.MIN_SAFE_INTEGER && clock_time-latest > 10000) document.location.reload();
 		});
 
 		var provider = {
