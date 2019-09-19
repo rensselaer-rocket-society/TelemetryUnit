@@ -11,7 +11,7 @@ def open_log(filename):
 	bat = []
 	gps = []
 
-	for rowarr in ([float(x) for x in row] for row in f):
+	for rowarr in ([float(x) for x in row if x!=""] for row in f):
 		src = rowarr[0]
 		if src==1:
 			targetArr = gps
