@@ -20226,7 +20226,6 @@ Created 2016-06-07, Hans Locher&lt;br&gt;
 <part name="R8" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="0"/>
 <part name="U3" library="TrackerPeripherals" deviceset="KMX63-1055" device=""/>
 <part name="U4" library="TrackerPeripherals" deviceset="LSM6DS3" device=""/>
-<part name="C13" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-US" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="100n"/>
 <part name="+3V10" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND21" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND22" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
@@ -20869,6 +20868,9 @@ battery monitoring up to 10.24V</text>
 <sheet>
 <description>Misc Sensing</description>
 <plain>
+<text x="124.46" y="27.94" size="1.778" layer="91" align="center-right">Decoupling for this is shared
+with the other accelerometer 
+(C12).  See layout.</text>
 </plain>
 <instances>
 <instance part="+3V3" gate="G$1" x="22.86" y="86.36" smashed="yes">
@@ -20907,10 +20909,6 @@ battery monitoring up to 10.24V</text>
 </instance>
 <instance part="U4" gate="G$1" x="139.7" y="27.94" smashed="yes">
 <attribute name="NAME" x="129.54" y="41.402" size="2.54" layer="94"/>
-</instance>
-<instance part="C13" gate="G$1" x="119.38" y="30.48" smashed="yes">
-<attribute name="NAME" x="120.396" y="31.115" size="1.778" layer="95"/>
-<attribute name="VALUE" x="120.396" y="26.289" size="1.778" layer="96"/>
 </instance>
 <instance part="+3V10" gate="G$1" x="119.38" y="48.26" smashed="yes">
 <attribute name="VALUE" x="116.84" y="43.18" size="1.778" layer="96" rot="R90"/>
@@ -20959,7 +20957,6 @@ battery monitoring up to 10.24V</text>
 </segment>
 <segment>
 <pinref part="+3V10" gate="G$1" pin="+3V3"/>
-<pinref part="C13" gate="G$1" pin="1"/>
 <wire x1="119.38" y1="45.72" x2="119.38" y2="38.1" width="0.1524" layer="91"/>
 <pinref part="U4" gate="G$1" pin="VDDIO"/>
 <wire x1="119.38" y1="38.1" x2="119.38" y2="35.56" width="0.1524" layer="91"/>
@@ -21011,11 +21008,10 @@ battery monitoring up to 10.24V</text>
 </segment>
 <segment>
 <pinref part="GND21" gate="1" pin="GND"/>
-<pinref part="C13" gate="G$1" pin="2"/>
 <wire x1="119.38" y1="12.7" x2="119.38" y2="17.78" width="0.1524" layer="91"/>
 <pinref part="U4" gate="G$1" pin="GND@1"/>
 <wire x1="119.38" y1="17.78" x2="119.38" y2="20.32" width="0.1524" layer="91"/>
-<wire x1="119.38" y1="20.32" x2="119.38" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="119.38" y1="20.32" x2="119.38" y2="22.86" width="0.1524" layer="91"/>
 <wire x1="124.46" y1="20.32" x2="119.38" y2="20.32" width="0.1524" layer="91"/>
 <junction x="119.38" y="20.32"/>
 <pinref part="U4" gate="G$1" pin="GND@2"/>
