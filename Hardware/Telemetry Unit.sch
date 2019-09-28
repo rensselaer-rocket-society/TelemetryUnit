@@ -20235,9 +20235,6 @@ Created 2016-06-07, Hans Locher&lt;br&gt;
 <sheet>
 <description>ATMega128 Microcontroller</description>
 <plain>
-<text x="93.98" y="76.2" size="1.778" layer="91">We should high-Z these
-pins so no effect when
-the XBee is installed</text>
 <text x="-22.86" y="10.16" size="1.778" layer="91" align="center-left">0.25 attenuation with 2.56V
 ADC reference = 1mV per bit
 battery monitoring up to 10.24V</text>
