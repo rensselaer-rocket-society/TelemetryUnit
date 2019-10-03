@@ -8129,7 +8129,7 @@ Source: avr.lbr</description>
 <pad name="2" x="0" y="-1.27" drill="1.1" shape="long"/>
 <wire x1="3.25" y1="2.77" x2="3.25" y2="0" width="0.127" layer="21"/>
 <wire x1="3.25" y1="0" x2="3.25" y2="-2.77" width="0.127" layer="21"/>
-<wire x1="-3.25" y1="2.77" x2="-3.25" y2="-2.77" width="0.127" layer="22"/>
+<wire x1="-3.25" y1="2.77" x2="-3.25" y2="-2.77" width="0.127" layer="21"/>
 <wire x1="-3.25" y1="0" x2="3.25" y2="0" width="0.127" layer="21"/>
 <wire x1="-3.25" y1="2.77" x2="3.25" y2="2.77" width="0.127" layer="21"/>
 <wire x1="-3.25" y1="-2.77" x2="3.25" y2="-2.77" width="0.127" layer="21"/>
