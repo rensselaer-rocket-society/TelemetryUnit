@@ -20619,7 +20619,7 @@ battery monitoring up to 10.24V</text>
 <label x="91.44" y="40.64" size="1.778" layer="95" align="bottom-right"/>
 </segment>
 </net>
-<net name="ACCEL_INT2" class="0">
+<net name="IMU_INT" class="0">
 <segment>
 <label x="93.98" y="17.78" size="1.778" layer="95" align="bottom-right"/>
 <wire x1="96.52" y1="17.78" x2="78.74" y2="17.78" width="0.1524" layer="91"/>
@@ -21086,7 +21086,7 @@ with the other accelerometer
 <pinref part="U3" gate="G$1" pin="GPIO1"/>
 </segment>
 </net>
-<net name="ACCEL_INT2" class="0">
+<net name="IMU_INT" class="0">
 <segment>
 <pinref part="U4" gate="G$1" pin="INT1"/>
 <wire x1="157.48" y1="25.4" x2="180.34" y2="25.4" width="0.1524" layer="91"/>

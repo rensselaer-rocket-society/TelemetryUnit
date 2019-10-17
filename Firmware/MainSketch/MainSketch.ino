@@ -1,22 +1,17 @@
-#include "libs/MPL3115A2_Altimeter.h"
-#include "libs/LSM6DS3_IMU.h"
-#include "libs/Packet.h"
+#include "inc/pin_defs.h"
+#include "inc/MPL3115A2_Altimeter.h"
+#include "inc/LSM6DS3_IMU.h"
+#include "inc/Packet.h"
 #include <TinyGPS++.h>
 #include <stdarg.h>
 
 #define LOG_SD 1
-#define TX_XBEE 1
 
 #if LOG_SD
 #include <SD.h>
 #endif
 
-// Useful pin numbers (see 64-pin-avr pins_arduino.h in MegaCore)
-#define PIN_GPS_WAKE 23
-#define PIN_RF_SLEEP 24
-#define PIN_GPS_FIX 22
-#define PIN_BAT_LEVEL 45
-#define PIN_SD_CHIP_SELECT 12
+
 
 #if LOG_SD
 const String SD_LOG_FILE = "log.csv";
@@ -99,13 +94,13 @@ void setup() {
   Serial.begin(38400);
 
   pinMode(PIN_GPS_WAKE, OUTPUT);
-  pinMode(PIN_RF_SLEEP, OUTPUT);
-  pinMode(PIN_GPS_FIX, INPUT);
+  pinMode(PIN_RF_SLP, OUTPUT);
+  pinMode(PIN_FIX, INPUT);
 
   digitalWrite(PIN_GPS_WAKE, HIGH); // GPS Awake
-  digitalWrite(PIN_RF_SLEEP, LOW);  // xBee not sleeping
+  digitalWrite(PIN_RF_SLP, LOW);  // xBee not sleeping
 
-  pinMode(PIN_BAT_LEVEL, INPUT);
+  pinMode(PIN_V_BAT, INPUT);
   analogReference(INTERNAL2V56); //Internal reference such that bat level is read in mV
 
   // Fallback if Arduino style doesn't work
@@ -137,7 +132,7 @@ void setup() {
 
 #if LOG_SD
   // see if the card is present and can be initialized:
-  if (!SD.begin(PIN_SD_CHIP_SELECT)) {
+  if (!SD.begin(PIN_CS_SD)) {
     Serial.print("SD error code ");
     Serial.println(SD.card.errorCode());
     while(true);
@@ -217,7 +212,7 @@ void loop() {
     alt_flag=0;
   }
   if(bat_flag) {
-    uint16_t centivolts = analogRead(PIN_BAT_LEVEL);
+    uint16_t centivolts = analogRead(PIN_V_BAT);
     uint32_t t = millis();
     packetizer.sendBattery(t,centivolts);
 

@@ -1,6 +1,6 @@
-#include "libs/Packet.h"
-#include "libs/COBS.h"
-#include "libs/CRC8.h"
+#include "inc/Packet.h"
+#include "inc/COBS.h"
+#include "inc/CRC8.h"
 
 
 Packet::Packet(HardwareSerial *serial)

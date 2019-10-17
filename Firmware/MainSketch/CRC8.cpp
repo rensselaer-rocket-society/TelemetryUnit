@@ -1,6 +1,4 @@
-
-
-#include "libs/CRC8.h"
+#include "inc/CRC8.h"
 
 
 CRC8::CRC8(void) {
