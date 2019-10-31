@@ -1,6 +1,7 @@
 #include "inc/pin_defs.h"
 #include "inc/MPL3115A2_Altimeter.h"
 #include "inc/LSM6DS3_IMU.h"
+#include "inc/KMX63_Accel_Mag.h"
 #include "inc/Packet.h"
 #include <TinyGPS++.h>
 #include <stdarg.h>
@@ -117,17 +118,21 @@ void setup() {
 
   //I2C Bus Check, could be removed, or set to disable missing or malfunctioning devices
   bool alt_ready = MPL::CheckDevicePresent();
-  bool accel_ready = LSM::CheckDevicePresent();
-  if(!(alt_ready && accel_ready)){
+  bool imu_ready = LSM::CheckDevicePresent();
+  bool accelmag_ready = KMX::CheckDevicePresent();
+  if(!(alt_ready && imu_ready)){
     Serial.println("I2C Device(s) not working!!!!!");
     Serial.print("Altimeter:    \t");
     Serial.println(alt_ready ? "PASS" : "FAIL");
-    Serial.print("Accelerometer:\t");
-    Serial.println(accel_ready ? "PASS" : "FAIL");
+    Serial.print("IMU:\t");
+    Serial.println(imu_ready ? "PASS" : "FAIL");
+    Serial.print("Accel/Mag:\t");
+    Serial.println(accelmag_ready ? "PASS" : "FAIL");
     while(true);
   } else {
     MPL::Init();
     LSM::Init();
+    KMX::Init();
   }
 
 #if LOG_SD
