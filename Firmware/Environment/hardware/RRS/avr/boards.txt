@@ -1,0 +1,58 @@
+menu.optimize=Optimization
+menu.LTO=LTO
+
+mmd.name=RRS MMD Tracker
+mmd.upload.tool=MegaCore:avrdude
+mmd.upload.protocol=arduino
+mmd.upload.maximum_size=130048
+mmd.upload.maximum_data_size=8192
+mmd.upload.port=UART0
+mmd.upload.speed=115200
+mmd.build.f_cpu=10000000L
+
+mmd.bootloader.tool=MegaCore:avrdude
+mmd.bootloader.unlock_bits=0x3f
+mmd.bootloader.lock_bits=0x0f
+mmd.bootloader.file=MMD_10MHz_Bootloader.hex
+
+mmd.bootloader.low_fuses=0xf7 # External Oscillator, Full Swing Mode
+mmd.bootloader.high_fuses=0xd6 # Make sure SPI programming is enabled!
+mmd.bootloader.extended_fuses=0xfd # 2.7V BOD Enabled
+# mmd.bootloader.extended_fuses=0xff # BOD Disabled
+
+mmd.build.core=MegaCore:MCUdude_corefiles
+mmd.build.variant=MegaCore:64-pin-avr
+mmd.build.mcu=atmega1281
+mmd.build.board=RRS_MMD
+
+# Compiler optimization level
+mmd.menu.optimize.Os=-Os (default)
+mmd.menu.optimize.Os.build.extra_flags=
+
+mmd.menu.optimize.O1=-O1
+mmd.menu.optimize.O1.build.extra_flags=-O1
+
+mmd.menu.optimize.O2=-O2
+mmd.menu.optimize.O2.build.extra_flags=-O2
+
+mmd.menu.optimize.O3=-O3
+mmd.menu.optimize.O3.build.extra_flags=-O3
+
+mmd.menu.optimize.Ofast=-Ofast (Caution)
+mmd.menu.optimize.Ofast.build.extra_flags=-Ofast
+
+mmd.menu.optimize.O0=None (-O0)
+mmd.menu.optimize.O0.build.extra_flags=-O0
+
+# Compiler link time optimization
+mmd.menu.LTO.off=Disabled
+mmd.menu.LTO.off.compiler.c.extra_flags=
+mmd.menu.LTO.off.compiler.c.elf.extra_flags=
+mmd.menu.LTO.off.compiler.cpp.extra_flags=
+mmd.menu.LTO.off.ltoarcmd=avr-ar
+
+mmd.menu.LTO.on=Enabled
+mmd.menu.LTO.on.compiler.c.extra_flags=-Wextra -flto
+mmd.menu.LTO.on.compiler.c.elf.extra_flags=-w -flto
+mmd.menu.LTO.on.compiler.cpp.extra_flags=-Wextra -flto
+mmd.menu.LTO.on.ltoarcmd=avr-gcc-ar

@@ -34,7 +34,7 @@ void Packet::sendGPS(uint32_t time, float latitude, float longitude)
     sendPacket(GPS, time, (uint8_t*)data, sizeof(data));
 }
 
-void Packet::sendAccel(uint32_t time, int16_t x_accel, int16_t y_accel, int16_t z_accel, int16_t x_gyro, int16_t y_gyro, int16_t z_gyro)
+void Packet::sendImu(uint32_t time, int16_t x_accel, int16_t y_accel, int16_t z_accel, int16_t x_gyro, int16_t y_gyro, int16_t z_gyro)
 {
     int16_t data[6];
     data[0] = x_accel;

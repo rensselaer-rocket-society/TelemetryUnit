@@ -6,13 +6,14 @@
 #define PIN_IMU_INT		5
 #define PIN_ACCEL_INT	6
 #define PIN_ALT_INT		7
-#define PIN_I2C_SCL		18
-#define PIN_I2C_SDA		19
+#define PIN_I2C_SCL		PIN_WIRE_SCL
+#define PIN_I2C_SDA		PIN_WIRE_SDA
 #define PIN_GPS_RX		20
 #define PIN_GPS_TX		21
 #define PIN_GPS_WAKE	22
 #define PIN_FIX			23
-#define PIN_SPI_SCK		9
-#define PIN_SPI_MOSI	10
-#define PIN_SPI_MISO	11
+// Already declared in pins_arduino.h
+// #define PIN_SPI_SCK		9
+// #define PIN_SPI_MOSI	10
+// #define PIN_SPI_MISO	11
 #define PIN_CS_SD		12

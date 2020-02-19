@@ -15,7 +15,7 @@ namespace KMX{
 	const uint8_t REG_INC3 = 0x2C;
 	const uint8_t REG_OUT_MAG = 0x10;
 	const uint8_t REG_OUT_XL = 0x0A;
-	const uint8_t REG_OUT_TEMP = 0x16
+	const uint8_t REG_OUT_TEMP = 0x16;
 	const uint8_t REG_ODCNTL = 0x38;
 	const uint8_t REG_CNTL2 = 0x3A;
 
@@ -37,7 +37,7 @@ namespace KMX{
 		return (status & 0x18) == 0x18; //If both channels are available
 	}
 
-	AccelGyroData ReadData() {
+	AccelMagData ReadData() {
 		AccelMagData ret;
 		//Byte orders are consistent for this device, can populate struct directly
 		I2c.read(I2C_ADDR, REG_OUT_XL, 14, (uint8_t*)&ret);
@@ -60,4 +60,4 @@ namespace KMX{
 	}
 }
 
-#endiff
+#endif

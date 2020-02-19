@@ -12,11 +12,36 @@
 #include <SD.h>
 #endif
 
+void accelMagISR();
+void imuISR();
+void altimeterISR();
 
+
+/***************************************************************************************************
+
+
+                                       Global Variables
+
+
+****************************************************************************************************/
+
+bool imu_flag, accel_flag, alt_flag, bat_flag;
+TinyGPSPlus gps;
+Packet packetizer(&Serial);
 
 #if LOG_SD
 const String SD_LOG_FILE = "log.csv";
+File loggerFile;
 #endif
+
+
+/***************************************************************************************************
+
+
+                                       Initialization
+
+
+****************************************************************************************************/
 
 void TimerInit() {
   ASSR &= ~0x20; // Use IO Clock
@@ -31,59 +56,8 @@ void USART1Init() { // Manually configure USART1 so we can use interrupts to fee
   UBRR1 = 64; // Set baud rate to 9600 ((10MHz/(16*9600Hz)-1 ~= 64)
   UCSR1B = 0x98; // Enable receive interrupts, receiver, and transmitter
   // Other initial values are okay (8-bit 1-stop no parity)
-  UCSR1B |= 0x20; //Enable data ready interupts (start transmission of cold reset
+  // UCSR1B |= 0x20; //Enable data ready interupts (start transmission of cold reset)
 }
-
-bool gps_flag, accel_flag, alt_flag, bat_flag;
-TinyGPSPlus gps;
-Packet packetizer(&Serial);
-
-#if LOG_SD
-File loggerFile;
-#endif
-
-ISR(TIMER2_OVF_vect) { // Runs every 6.5536 ms
-
-  static uint8_t gps_counter=0; //Might be unecessary, could use TinyGPS isUpdated() on relevant streams
-  if(++gps_counter >= 153){ // Set every 1.0027 s
-    gps_flag=1;
-    gps_counter=0;
-  }
-
-  static uint8_t accel_counter=0;
-  if(++accel_counter >= 2){ // Set every 13.1072 ms (Based on 104Hz rate selection)
-    accel_flag=1;
-    accel_counter=0;
-  }
-
-  static uint8_t alt_counter=0;
-  if(++alt_counter >= 20){ // Set every 131.072 ms (Just over 130 ms at 32x Oversampling)
-    alt_flag=1;
-    alt_counter=0;
-  }
-
-  static uint16_t bat_counter=0;
-  if(++bat_counter >= 1526) { // Set every 10s
-    bat_flag=1;
-    bat_counter=0;
-  }
-}
-
-ISR(USART1_RX_vect) { // Feed GPS UART data to parser
-  char data = UDR1;
-  gps.encode(data);
-}
-ISR(USART1_UDRE_vect) { // Send GPS cold restart at power up
-  const static char PMTK_CMD[] = "$PMTK104*37\r\n";
-  static uint16_t transmit_char = 0;
-  if(PMTK_CMD[transmit_char] != '\0'){
-    UDR1 = PMTK_CMD[transmit_char++]; //Send char
-  } else {
-    transmit_char = 0;
-    UCSR1B &= ~0x20; //Disable data reg empty interrupts
-  }
-}
-
 
 void setup() {
   // put your setup code here, to run once:
@@ -102,13 +76,11 @@ void setup() {
   digitalWrite(PIN_RF_SLP, LOW);  // xBee not sleeping
 
   pinMode(PIN_V_BAT, INPUT);
-  analogReference(INTERNAL2V56); //Internal reference such that bat level is read in mV
+  analogReference(INTERNAL2V56); //Internal reference such that bat level is read in cV
 
-  // Fallback if Arduino style doesn't work
-  // DDRD |= 0x70;
-  // PORTD |= 0x20; //GPS Awake
-  // PORTD &= ~0x50; //xBee not sleep, no pullup on FIX
-  
+  attachInterrupt(digitalPinToInterrupt(PIN_ACCEL_INT),accelMagISR,RISING);
+  attachInterrupt(digitalPinToInterrupt(PIN_IMU_INT),imuISR,RISING);
+  attachInterrupt(digitalPinToInterrupt(PIN_ALT_INT),altimeterISR,RISING);
 
   interrupts();
 
@@ -139,7 +111,7 @@ void setup() {
   // see if the card is present and can be initialized:
   if (!SD.begin(PIN_CS_SD)) {
     Serial.print("SD error code ");
-    Serial.println(SD.card.errorCode());
+//    Serial.println(SD.card.errorCode());
     while(true);
   }
   else {
@@ -173,8 +145,81 @@ void logSDEvent(char type, uint32_t t, unsigned int count, ...){
 }
 #endif
 
+
+/***************************************************************************************************
+
+
+                                       Program Logic
+
+
+****************************************************************************************************/
+
+//******************************
+//        Interrupts
+//******************************
+
+ISR(TIMER2_OVF_vect) { // Runs every 6.5536 ms
+
+  // static uint8_t gps_counter=0; //Might be unecessary, could use TinyGPS isUpdated() on relevant streams
+  // if(++gps_counter >= 153){ // Set every 1.0027 s
+  //   gps_flag=1;
+  //   gps_counter=0;
+  // }
+
+  // static uint8_t accel_counter=0;
+  // if(++accel_counter >= 2){ // Set every 13.1072 ms (Based on 104Hz rate selection)
+  //   accel_flag=1;
+  //   accel_counter=0;
+  // }
+
+  // static uint8_t alt_counter=0;
+  // if(++alt_counter >= 20){ // Set every 131.072 ms (Just over 130 ms at 32x Oversampling)
+  //   alt_flag=1;
+  //   alt_counter=0;
+  // }
+
+  static uint16_t bat_counter=0;
+  if(++bat_counter >= 1526) { // Set every 10s
+    bat_flag=1;
+    bat_counter=0;
+  }
+}
+
+ISR(USART1_RX_vect) { // Feed GPS UART data to parser
+  char data = UDR1;
+  gps.encode(data);
+}
+// ISR(USART1_UDRE_vect) { // Send GPS cold restart at power up
+//   const static char PMTK_CMD[] = "$PMTK104*37\r\n";
+//   static uint16_t transmit_char = 0;
+//   if(PMTK_CMD[transmit_char] != '\0'){
+//     UDR1 = PMTK_CMD[transmit_char++]; //Send char
+//   } else {
+//     transmit_char = 0;
+//     UCSR1B &= ~0x20; //Disable data reg empty interrupts
+//   }
+// }
+
+void accelMagISR()
+{
+  accel_flag = 1;
+}
+void imuISR()
+{
+  imu_flag = 1;
+}
+void altimeterISR()
+{
+  alt_flag = 1;
+}
+
+
+//******************************
+//        Main Loop
+//******************************
+
 void loop() {
-  if(gps_flag){
+  if(gps.location.isUpdated()){
     float lat = gps.location.lat();
     float lng = gps.location.lng();
     uint32_t t = millis();
@@ -183,9 +228,8 @@ void loop() {
       loggerFile.flush();
     #endif
     packetizer.sendGPS(t,lat,lng);
-    gps_flag=0;
   }
-  if(accel_flag){
+  if(imu_flag){
     LSM::AccelGyroData dat = LSM::CheckAndRead();
     uint32_t t = millis();
     float x_mpsps = dat.accel.x*LSM::ACCEL_TO_MPSPS;
@@ -199,7 +243,7 @@ void loop() {
       logSDEvent('3',t,6,x_mpsps,y_mpsps,z_mpsps,x_dps,y_dps,z_dps);
     #endif
     
-    packetizer.sendAccel(t,dat.accel.x,dat.accel.y,dat.accel.z,dat.gyro.x,dat.gyro.y,dat.gyro.z);
+    packetizer.sendImu(t,dat.accel.x,dat.accel.y,dat.accel.z,dat.gyro.x,dat.gyro.y,dat.gyro.z);
     accel_flag=0;
   }
   if(alt_flag){
