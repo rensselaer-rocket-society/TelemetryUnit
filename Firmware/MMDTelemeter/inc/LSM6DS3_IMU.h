@@ -8,8 +8,10 @@ namespace LSM{
 	const float ACCEL_TO_MPSPS = 0.004788;
 	const float GYRO_TO_DPS = 0.0175;
 
-	const uint8_t I2C_ADDR = 0x6B; //APPARENTLY I2C Library doesn't want shifted address
+	const uint8_t I2C_ADDR = 0x6A; //APPARENTLY I2C Library doesn't want shifted address
 
+	const uint8_t REG_INT1_CTRL = 0x0D;
+	const uint8_t REG_CTRL3_C = 0x12;
 	const uint8_t REG_STATUS = 0x1E;
 	const uint8_t REG_OUT_G = 0x22;
 	const uint8_t REG_OUT_XL = 0x28;
@@ -40,16 +42,6 @@ namespace LSM{
 		return ret;
 	}
 
-	AccelGyroData CheckAndRead() {
-		if(IsDataReady()){
-			return ReadData();
-		} else {
-			AccelGyroData ret;
-			memset(&ret, 0xFF, sizeof(ret));
-			return ret;
-		}
-	}
-
 	AccelGyroData BlockingRead() {
 		bool ready;
 		do{
@@ -60,12 +52,13 @@ namespace LSM{
 
 	bool CheckDevicePresent() {
 		uint8_t whoami;
-		if(!I2c.read(I2C_ADDR, 0x0F, 1, &whoami)){ 
+		if(!I2c.read(I2C_ADDR, 0x0F, 1, &whoami)){
 			return whoami == 0x69;
 		} else return false;
 	}
 
 	void Init() {
+		I2c.write(I2C_ADDR, REG_INT1_CTRL, (uint8_t)0x03); // Enable Data Ready interrupts
 		I2c.write(I2C_ADDR, REG_CTRL1_XL, (uint8_t)0x44); // 104Hz, +/-16g
 		I2c.write(I2C_ADDR, REG_CTRL2_G, (uint8_t)0x44);  // 104Hz, Full scale 500dps (maybe lower?)
 	}

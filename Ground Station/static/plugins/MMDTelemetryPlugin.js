@@ -1,7 +1,7 @@
 let folder_defs = [
 	{
 		key:"root",
-		name:"RRS MMD Tracker v1.0",
+		name:"RRS MMD Tracker v2.0",
 		location:"ROOT",
 		composition: [
 			{namespace:"rrs.mmd",key:"accel"},
@@ -9,7 +9,9 @@ let folder_defs = [
 			{namespace:"rrs.mmd.measure",key:"gps"},
 			{namespace:"rrs.mmd.measure",key:"altitude"},
 			{namespace:"rrs.mmd.measure",key:"temp"},
-			{namespace:"rrs.mmd.measure",key:"battery"}
+			{namespace:"rrs.mmd.measure",key:"battery"},
+			{namespace:"rrs.mmd",key:"accelhg"},
+			{namespace:"rrs.mmd",key:"mag"}
 		]
 	},
 	{
@@ -30,6 +32,26 @@ let folder_defs = [
 			{namespace:"rrs.mmd.measure",key:"gyrox"},
 			{namespace:"rrs.mmd.measure",key:"gyroy"},
 			{namespace:"rrs.mmd.measure",key:"gyroz"}
+		]
+	},
+	{
+		key: "accelhg",
+		name : "High-G Accelerometer",
+		location : "rrs.mmd:root",
+		composition : [
+			{namespace:"rrs.mmd.measure",key:"accelhgx"},
+			{namespace:"rrs.mmd.measure",key:"accelhgy"},
+			{namespace:"rrs.mmd.measure",key:"accelhgz"}
+		]
+	},
+	{
+		key : "mag",
+		name : "Magnetometer",
+		location : "rrs.mmd:root",
+		composition : [
+			{namespace:"rrs.mmd.measure",key:"magx"},
+			{namespace:"rrs.mmd.measure",key:"magy"},
+			{namespace:"rrs.mmd.measure",key:"magz"}
 		]
 	}
 ]
@@ -71,7 +93,7 @@ let telemetry_defs = [
 	        {
 	        	key: "accelx",
 	            name: "X Acceleration",
-	            units: "g",
+	            units: "m/s^2",
 	            format: "float",
 	            hints: {
 	                range: 1
@@ -86,7 +108,7 @@ let telemetry_defs = [
 	        {
 	        	key: "accely",
 	            name: "Y Acceleration",
-	            units: "g",
+	            units: "m/s^2",
 	            format: "float",
 	            hints: {
 	                range: 1
@@ -101,7 +123,7 @@ let telemetry_defs = [
 	        {
 	        	key: "accelz",
 	            name: "Z Acceleration",
-	            units: "g",
+	            units: "m/s^2",
 	            format: "float",
 	            hints: {
 	                range: 1
@@ -116,7 +138,7 @@ let telemetry_defs = [
 	        {
 	        	key: "gyrox",
 	            name: "X Rotation",
-	            units: "°",
+	            units: "°/s",
 	            format: "float",
 	            hints: {
 	                range: 1
@@ -131,7 +153,7 @@ let telemetry_defs = [
 	        {
 	        	key: "gyroy",
 	            name: "Y Rotation",
-	            units: "°",
+	            units: "°/s",
 	            format: "float",
 	            hints: {
 	                range: 1
@@ -146,7 +168,7 @@ let telemetry_defs = [
 	        {
 	        	key: "gyroz",
 	            name: "Z Rotation",
-	            units: "°",
+	            units: "°/s",
 	            format: "float",
 	            hints: {
 	                range: 1
@@ -192,6 +214,96 @@ let telemetry_defs = [
 	        	key: "volts",
 	            name: "Voltage",
 	            units: "V",
+	            format: "float",
+	            hints: {
+	                range: 1
+	            }
+	        }
+        ]
+	}, {
+		key: "accelhgx",
+		name: "Accelerometer X",
+		location : "rrs.mmd:accelhg",
+        values: [
+	        {
+	        	key: "accelhgx",
+	            name: "X Acceleration",
+	            units: "m/s^2",
+	            format: "float",
+	            hints: {
+	                range: 1
+	            }
+	        }
+        ]
+	}, {
+		key: "accelhgy",
+		name: "Accelerometer Y",
+		location : "rrs.mmd:accelhg",
+        values: [
+	        {
+	        	key: "accelhgy",
+	            name: "Y Acceleration",
+	            units: "m/s^2",
+	            format: "float",
+	            hints: {
+	                range: 1
+	            }
+	        }
+        ]
+	}, {
+		key: "accelhgz",
+		name: "Accelerometer Z",
+		location : "rrs.mmd:accelhg",
+        values: [
+	        {
+	        	key: "accelhgz",
+	            name: "Z Acceleration",
+	            units: "m/s^2",
+	            format: "float",
+	            hints: {
+	                range: 1
+	            }
+	        }
+        ]
+	}, {
+		key: "magx",
+		name: "Magnetometer X",
+		location : "rrs.mmd:mag",
+        values: [
+	        {
+	        	key: "magx",
+	            name: "X Magnetic Field",
+	            units: "μT",
+	            format: "float",
+	            hints: {
+	                range: 1
+	            }
+	        }
+        ]
+	}, {
+		key: "magy",
+		name: "Magnetometer Y",
+		location : "rrs.mmd:mag",
+        values: [
+	        {
+	        	key: "magy",
+	            name: "Y Magnetic Field",
+	            units: "μT",
+	            format: "float",
+	            hints: {
+	                range: 1
+	            }
+	        }
+        ]
+	}, {
+		key: "magz",
+		name: "Magnetometer Z",
+		location : "rrs.mmd:mag",
+        values: [
+	        {
+	        	key: "magz",
+	            name: "Z Magnetic Field",
+	            units: "μT",
 	            format: "float",
 	            hints: {
 	                range: 1

@@ -5,7 +5,7 @@
 
 namespace KMX{
 
-	const float ACCEL_TO_MPSPS = 0.00195;
+	const float ACCEL_TO_MPSPS = 0.0192;
 	const float MAG_TO_UTSLA = 0.03662;
 
 	const uint8_t I2C_ADDR = 0x0E; //APPARENTLY I2C Library doesn't want shifted address
@@ -26,8 +26,8 @@ namespace KMX{
 	};
 
 	struct AccelMagData {
-		Vec3 accel; // 4.788 mm/(s^2) (0.488 mg) per LSB
-		Vec3 magneto; // 17.5 mDeg/s per LSB (1.05 arcminutes/s per LSB)
+		Vec3 accel; // 19.2 mm/(s^2) (1.95 mg) per LSB
+		Vec3 magneto; // 36.62 nT per LSB
 		int16_t temp;
 	};
 	
@@ -56,7 +56,7 @@ namespace KMX{
 		I2c.write(I2C_ADDR, REG_INC1, (uint8_t)0x18); // Accel/Mag data ready interrupt GPIO1
 		I2c.write(I2C_ADDR, REG_INC3, (uint8_t)0x81); // GPIO1 Push-Pull Pulsed Active Low
 		I2c.write(I2C_ADDR, REG_ODCNTL, (uint8_t)0x33); // 100 Hz mode for both accel, mag, and temp
-		I2c.write(I2C_ADDR, REG_CNTL2, (uint8_t)0x7D); // Turn on accel/mag/gyro +/-64G range, maximum resolution
+		I2c.write(I2C_ADDR, REG_CNTL2, (uint8_t)0x7F); // Turn on accel/mag/gyro +/-64G range, maximum resolution
 	}
 }
 

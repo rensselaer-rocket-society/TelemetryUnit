@@ -6,7 +6,7 @@
 #include <TinyGPS++.h>
 #include <stdarg.h>
 
-#define LOG_SD 1
+#define LOG_SD 0
 
 #if LOG_SD
 #include <SD.h>
@@ -25,7 +25,7 @@ void altimeterISR();
 
 ****************************************************************************************************/
 
-bool imu_flag, accel_flag, alt_flag, bat_flag;
+bool imu_flag, accel_flag, alt_flag, bat_flag, gps_flag;
 TinyGPSPlus gps;
 Packet packetizer(&Serial);
 
@@ -66,7 +66,7 @@ void setup() {
   
   TimerInit();
   USART1Init();
-  Serial.begin(38400);
+  Serial.begin(115200);
 
   pinMode(PIN_GPS_WAKE, OUTPUT);
   pinMode(PIN_RF_SLP, OUTPUT);
@@ -78,7 +78,7 @@ void setup() {
   pinMode(PIN_V_BAT, INPUT);
   analogReference(INTERNAL2V56); //Internal reference such that bat level is read in cV
 
-  attachInterrupt(digitalPinToInterrupt(PIN_ACCEL_INT),accelMagISR,RISING);
+  attachInterrupt(digitalPinToInterrupt(PIN_ACCEL_INT),accelMagISR,FALLING);
   attachInterrupt(digitalPinToInterrupt(PIN_IMU_INT),imuISR,RISING);
   attachInterrupt(digitalPinToInterrupt(PIN_ALT_INT),altimeterISR,RISING);
 
@@ -105,6 +105,10 @@ void setup() {
     MPL::Init();
     LSM::Init();
     KMX::Init();
+    // Force first read to make sure interrupts are cleared and will be detected
+    imu_flag = 1;
+    accel_flag = 1;
+    alt_flag = 1;
   }
 
 #if LOG_SD
@@ -160,23 +164,11 @@ void logSDEvent(char type, uint32_t t, unsigned int count, ...){
 
 ISR(TIMER2_OVF_vect) { // Runs every 6.5536 ms
 
-  // static uint8_t gps_counter=0; //Might be unecessary, could use TinyGPS isUpdated() on relevant streams
-  // if(++gps_counter >= 153){ // Set every 1.0027 s
-  //   gps_flag=1;
-  //   gps_counter=0;
-  // }
-
-  // static uint8_t accel_counter=0;
-  // if(++accel_counter >= 2){ // Set every 13.1072 ms (Based on 104Hz rate selection)
-  //   accel_flag=1;
-  //   accel_counter=0;
-  // }
-
-  // static uint8_t alt_counter=0;
-  // if(++alt_counter >= 20){ // Set every 131.072 ms (Just over 130 ms at 32x Oversampling)
-  //   alt_flag=1;
-  //   alt_counter=0;
-  // }
+  static uint8_t gps_counter=0; //Might be unecessary, could use TinyGPS isUpdated() on relevant streams
+  if(++gps_counter >= 153){ // Set every 1.0027 s
+    gps_flag=1;
+    gps_counter=0;
+  }
 
   static uint16_t bat_counter=0;
   if(++bat_counter >= 1526) { // Set every 10s
@@ -213,13 +205,12 @@ void altimeterISR()
   alt_flag = 1;
 }
 
-
 //******************************
 //        Main Loop
 //******************************
 
 void loop() {
-  if(gps.location.isUpdated()){
+  if(gps_flag){
     float lat = gps.location.lat();
     float lng = gps.location.lng();
     uint32_t t = millis();
@@ -230,34 +221,57 @@ void loop() {
     packetizer.sendGPS(t,lat,lng);
   }
   if(imu_flag){
-    LSM::AccelGyroData dat = LSM::CheckAndRead();
+    // Interrupt sourced, no need to check status
+    LSM::AccelGyroData dat = LSM::ReadData();
     uint32_t t = millis();
-    float x_mpsps = dat.accel.x*LSM::ACCEL_TO_MPSPS;
-    float y_mpsps = dat.accel.y*LSM::ACCEL_TO_MPSPS;
-    float z_mpsps = dat.accel.z*LSM::ACCEL_TO_MPSPS;
-    float x_dps = dat.gyro.x*LSM::GYRO_TO_DPS;
-    float y_dps = dat.gyro.y*LSM::GYRO_TO_DPS;
-    float z_dps = dat.gyro.z*LSM::GYRO_TO_DPS;
 
     #if LOG_SD
+      float x_mpsps = dat.accel.x*LSM::ACCEL_TO_MPSPS;
+      float y_mpsps = dat.accel.y*LSM::ACCEL_TO_MPSPS;
+      float z_mpsps = dat.accel.z*LSM::ACCEL_TO_MPSPS;
+      float x_dps = dat.gyro.x*LSM::GYRO_TO_DPS;
+      float y_dps = dat.gyro.y*LSM::GYRO_TO_DPS;
+      float z_dps = dat.gyro.z*LSM::GYRO_TO_DPS;
+
       logSDEvent('3',t,6,x_mpsps,y_mpsps,z_mpsps,x_dps,y_dps,z_dps);
     #endif
     
     packetizer.sendImu(t,dat.accel.x,dat.accel.y,dat.accel.z,dat.gyro.x,dat.gyro.y,dat.gyro.z);
+    imu_flag=0;
+  }
+  if(accel_flag){
+    // Interrupt sourced, no need to check status
+    KMX::AccelMagData dat = KMX::ReadData();
+    uint32_t t = millis();
+
+    #if LOG_SD
+      float x_mpsps = dat.accel.x*KMX::ACCEL_TO_MPSPS;
+      float y_mpsps = dat.accel.y*KMX::ACCEL_TO_MPSPS;
+      float z_mpsps = dat.accel.z*KMX::ACCEL_TO_MPSPS;
+      float x_mag = dat.magneto.x*KMX::MAG_TO_UTSLA;
+      float y_mag = dat.magneto.y*KMX::MAG_TO_UTSLA;
+      float z_mag = dat.magneto.z*KMX::MAG_TO_UTSLA;
+
+      logSDEvent('5',t,6,x_mpsps,y_mpsps,z_mpsps,x_mag,y_mag,z_mag);
+    #endif
+      
+    packetizer.sendAccelMag(t,dat.accel.x,dat.accel.y,dat.accel.z,dat.magneto.x,dat.magneto.y,dat.magneto.z);
     accel_flag=0;
   }
   if(alt_flag){
-    MPL::AltTempData dat = MPL::CheckAndRead();
-    uint32_t t = millis();
-    float alt_m = dat.alt*MPL::ALT_TO_M;
-    float temp_c = dat.temp*MPL::TEMP_TO_C;
+    MPL::AltTempData dat;
+    if(MPL::CheckAndRead(&dat)) {
+      uint32_t t = millis();
+      #if LOG_SD
+        float alt_m = dat.alt*MPL::ALT_TO_M;
+        float temp_c = dat.temp*MPL::TEMP_TO_C;
 
-    #if LOG_SD
-      logSDEvent('2',t,2,alt_m,temp_c);
-    #endif
-    
-    packetizer.sendAltitude(t,dat.alt, dat.temp);
-    MPL::RequestData();
+        logSDEvent('2',t,2,alt_m,temp_c);
+      #endif
+      
+      packetizer.sendAltitude(t,dat.alt, dat.temp);
+    }
+    MPL::RequestData(); // ensure data is requested
     alt_flag=0;
   }
   if(bat_flag) {

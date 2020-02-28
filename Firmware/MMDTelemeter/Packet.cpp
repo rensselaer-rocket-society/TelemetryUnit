@@ -43,7 +43,19 @@ void Packet::sendImu(uint32_t time, int16_t x_accel, int16_t y_accel, int16_t z_
     data[3] = x_gyro;
     data[4] = y_gyro;
     data[5] = z_gyro;
-    sendPacket(ACCEL, time, (uint8_t*)data, sizeof(data));
+    sendPacket(IMU, time, (uint8_t*)data, sizeof(data));
+}
+
+void Packet::sendAccelMag(uint32_t time, int16_t x_accel, int16_t y_accel, int16_t z_accel, int16_t x_mag, int16_t y_mag, int16_t z_mag)
+{
+    int16_t data[6];
+    data[0] = x_accel;
+    data[1] = y_accel;
+    data[2] = z_accel;
+    data[3] = x_mag;
+    data[4] = y_mag;
+    data[5] = z_mag;
+    sendPacket(ACCEL_MAG, time, (uint8_t*)data, sizeof(data));
 }
 
 void Packet::sendPacket(PacketContent packet_content, uint32_t time, uint8_t *data, uint8_t data_length)

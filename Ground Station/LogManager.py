@@ -98,6 +98,17 @@ class TelemetryManager:
 			voltage = self.eventlogs["battery"][i]
 			self.datalock.release()
 			f.write('4,' + str(voltage.time) + ',' + str(voltage.data['volts']) + '\n')
+		for i in range(len(self.eventlogs.get("accelhgx",[]))):
+			self.datalock.acquire() # Only compute string under lock
+			outstr = '5,'+str(self.eventlogs["accelhgx"][i].time)+','+ \
+				str(self.eventlogs["accelhgx"][i].data["accelhgx"]) + ',' + \
+				str(self.eventlogs["accelhgy"][i].data["accelhgy"]) + ',' + \
+				str(self.eventlogs["accelhgz"][i].data["accelz"]) + ',' + \
+				str(self.eventlogs["magx"][i].data["magx"]) + ',' + \
+				str(self.eventlogs["magy"][i].data["magy"]) + ',' + \
+				str(self.eventlogs["magz"][i].data["magz"]) + '\n'
+			self.datalock.release()
+			f.write(outstr)
 		self.fileiolock.release()
 
 	def restoreFromDisk(self,filename):
@@ -121,5 +132,12 @@ class TelemetryManager:
 				self._logEvent({"id":"gyroz",  "timestamp":t, "gyroz": float(vals[7])})
 			elif type == '4': # Battery
 				self._logEvent({"id":"battery", "timestamp":t, "volts": float(vals[2])})
+			elif type == '5':
+				self._logEvent({"id":"accelhgx", "timestamp":t, "accelhgx":float(vals[2])})
+				self._logEvent({"id":"accelhgy", "timestamp":t, "accelhgy":float(vals[3])})
+				self._logEvent({"id":"accelhgz", "timestamp":t, "accelhgz":float(vals[4])})
+				self._logEvent({"id":"magx",  "timestamp":t, "magx": float(vals[5])})
+				self._logEvent({"id":"magy",  "timestamp":t, "magy": float(vals[6])})
+				self._logEvent({"id":"magz",  "timestamp":t, "magz": float(vals[7])})
 		self.fileiolock.release()
 

@@ -15,6 +15,9 @@ namespace MPL{
 	const uint8_t REG_SYSMOD = 0x11;
 	const uint8_t REG_PT_DATA_CFG = 0x13;
 	const uint8_t REG_CTRL_REG1 = 0x26;
+	const uint8_t REG_CTRL_REG3 = 0x29;
+	const uint8_t REG_CTRL_REG4 = 0x29;
+	const uint8_t REG_CTRL_REG5 = 0x2A;
 	const uint8_t REG_OFF_H = 0x2D;
 
 	struct AltTempData {
@@ -41,15 +44,14 @@ namespace MPL{
 		return decode(raw);
 	}
 
-	AltTempData CheckAndRead() {
+	bool CheckAndRead(AltTempData* result) {
 		uint8_t data[6];
-		I2c.read(I2C_ADDR, REG_STATUS, 6, data); //Status and data (maybe)
+		I2c.read(I2C_ADDR, REG_STATUS, 6, data); // Status and data (maybe)
 		if(data[0] & 0x08){
-			return decode(data+1);
+			*result = decode(data+1);
+			return true;
 		} else {
-			AltTempData ret;
-			memset(&ret, 0xFF, sizeof(ret));
-			return ret;
+			return false;
 		}
 	}
 
@@ -84,6 +86,9 @@ namespace MPL{
 
 	void Init() {
 		I2c.write(I2C_ADDR, REG_PT_DATA_CFG, (uint8_t)0x07); //Enable data ready flags
+		I2c.write(I2C_ADDR, REG_CTRL_REG3, (uint8_t)0x20); // INT1 Active High
+		I2c.write(I2C_ADDR, REG_CTRL_REG5, (uint8_t)0x80); // Data Ready Interrupt to INT1
+		I2c.write(I2C_ADDR, REG_CTRL_REG4, (uint8_t)0x80); // Data Ready Interrupt enabled
 		I2c.write(I2C_ADDR, REG_CTRL_REG1, BASE_CTRL); //Base config
 	}
 }

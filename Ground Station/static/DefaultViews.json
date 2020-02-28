@@ -16,6 +16,12 @@
 			}, {
 				"namespace": "",
 				"key": "statusbox"
+			}, {
+				"namespace": "",
+				"key": "accelhggraph"
+			}, {
+				"namespace": "",
+				"key": "maggraph"
 			}],
 			"name": "MMD Default Telemetry Views",
 			"type": "folder",
@@ -162,6 +168,84 @@
 			"identifier": {
 				"namespace": "",
 				"key": "gyrograph"
+			}
+		},
+		"accelhggraph": {
+			"composition": [{
+				"namespace": "rrs.mmd.measure",
+				"key": "accelhgx"
+			}, {
+				"namespace": "rrs.mmd.measure",
+				"key": "accelhgy"
+			}, {
+				"namespace": "rrs.mmd.measure",
+				"key": "accelhgz"
+			}],
+			"configuration": {
+				"series": [{
+					"identifier": {
+						"namespace": "rrs.mmd.measure",
+						"key": "accelhgx"
+					}
+				}, {
+					"identifier": {
+						"namespace": "rrs.mmd.measure",
+						"key": "accelhgy"
+					}
+				}, {
+					"identifier": {
+						"namespace": "rrs.mmd.measure",
+						"key": "accelhgz"
+					}
+				}],
+				"yAxis": {},
+				"xAxis": {}
+			},
+			"name": "High-G Accelerometer All",
+			"type": "telemetry.plot.overlay",
+			"location": "defaultViewRoot",
+			"identifier": {
+				"namespace": "",
+				"key": "accelhggraph"
+			}
+		},
+		"maggraph": {
+			"composition": [{
+				"namespace": "rrs.mmd.measure",
+				"key": "magx"
+			}, {
+				"namespace": "rrs.mmd.measure",
+				"key": "magy"
+			}, {
+				"namespace": "rrs.mmd.measure",
+				"key": "magz"
+			}],
+			"configuration": {
+				"series": [{
+					"identifier": {
+						"namespace": "rrs.mmd.measure",
+						"key": "magx"
+					}
+				}, {
+					"identifier": {
+						"namespace": "rrs.mmd.measure",
+						"key": "magy"
+					}
+				}, {
+					"identifier": {
+						"namespace": "rrs.mmd.measure",
+						"key": "magz"
+					}
+				}],
+				"yAxis": {},
+				"xAxis": {}
+			},
+			"name": "Magnetometer All",
+			"type": "telemetry.plot.overlay",
+			"location": "defaultViewRoot",
+			"identifier": {
+				"namespace": "",
+				"key": "maggraph"
 			}
 		},
 		"gpstab": {

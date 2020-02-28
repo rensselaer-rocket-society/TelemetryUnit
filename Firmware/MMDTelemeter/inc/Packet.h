@@ -8,15 +8,17 @@
 class Packet
 {
 public:
-    enum PacketContent : uint8_t { GPS=0x01, ALTITUDE=0x02, ACCEL=0x03, BATTERY=0x04 };
+    enum PacketContent : uint8_t { GPS=0x01, ALTITUDE=0x02, IMU=0x03, BATTERY=0x04, ACCEL_MAG=0x05};
 
     Packet(HardwareSerial *serial);
 
     void sendBattery(uint32_t time, uint16_t voltage);
     void sendAltitude(uint32_t time, int32_t altitude, int16_t temperature);
     void sendGPS(uint32_t time, float latitude, float longitude);
-    void sendImu(uint32_t time, 	int16_t x_accel,  int16_t y_accel,   int16_t z_accel,
-    				                int16_t x_gyro,   int16_t y_gyro,    int16_t z_gyro);
+    void sendImu(uint32_t time, 	 int16_t x_accel,  int16_t y_accel,   int16_t z_accel,
+    				                 int16_t x_gyro,   int16_t y_gyro,    int16_t z_gyro);
+    void sendAccelMag(uint32_t time, int16_t x_accel,  int16_t y_accel,   int16_t z_accel,
+                                     int16_t x_mag,    int16_t y_mag,     int16_t z_mag);
 
 private:
     void sendPacket(PacketContent packetContent, uint32_t time, uint8_t *data, uint8_t data_length);

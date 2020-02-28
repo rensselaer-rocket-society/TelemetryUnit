@@ -12,7 +12,8 @@ from fixedint import UInt8
 # Correspondance by packet type ID [None, GPS, Alt, Accel]
 GPS_DATA_FORMAT = '<Iff'
 ALTIMETER_DATA_FORMAT = '<Iih'
-ACCEL_DATA_FORMAT = '<Ihhhhhh'
+IMU_DATA_FORMAT = '<Ihhhhhh'
+ACCEL_MAG_DATA_FORMAT = '<Ihhhhhh'
 BATTERY_DATA_FORMAT = '<IH'
 PACKET_HEADER_FORMAT = '<BBB'
 
@@ -43,8 +44,8 @@ class DecoderThread(threading.Thread):
 					"temp": temp/16.0
 				}])
 
-	def decode_Accel(self,data):
-		t, accelx, accely, accelz, gyrox, gyroy, gyroz = struct.unpack(ACCEL_DATA_FORMAT, data)
+	def decode_IMU(self,data):
+		t, accelx, accely, accelz, gyrox, gyroy, gyroz = struct.unpack(IMU_DATA_FORMAT, data)
 		accel_to_mpsps = 0.004788
 		gyro_to_dps = 0.0175
 		self.telemetry.logEvents([
@@ -54,6 +55,19 @@ class DecoderThread(threading.Thread):
 			{"id":"gyrox",  "timestamp":t, "gyrox":gyrox*gyro_to_dps },
 			{"id":"gyroy",  "timestamp":t, "gyroy":gyroy*gyro_to_dps },
 			{"id":"gyroz",  "timestamp":t, "gyroz":gyroz*gyro_to_dps }
+		])
+
+	def decode_AccelMag(self,data):
+		t, accelx, accely, accelz, magx, magy, magz = struct.unpack(IMU_DATA_FORMAT, data)
+		accel_to_mpsps = 0.0192
+		mag_to_utsla = 0.03662
+		self.telemetry.logEvents([
+			{"id":"accelhgx", "timestamp":t, "accelhgx":accelx*accel_to_mpsps },
+			{"id":"accelhgy", "timestamp":t, "accelhgy":accely*accel_to_mpsps },
+			{"id":"accelhgz", "timestamp":t, "accelhgz":accelz*accel_to_mpsps },
+			{"id":"magx",  "timestamp":t, "magx":magx*mag_to_utsla },
+			{"id":"magy",  "timestamp":t, "magy":magy*mag_to_utsla },
+			{"id":"magz",  "timestamp":t, "magz":magz*mag_to_utsla }
 		])
 
 	def decode_Battery(self, data):
@@ -67,7 +81,7 @@ class DecoderThread(threading.Thread):
 	def getSerial(self):
 		while 1:
 			try:
-				stream = serial.Serial(self.ser_port,38400)
+				stream = serial.Serial(self.ser_port,115200)
 				return stream
 			except:
 				continue
@@ -124,9 +138,11 @@ class DecoderThread(threading.Thread):
 					elif(p_type == 2):
 						self.decode_Alt(data_bytes)
 					elif(p_type == 3):
-						self.decode_Accel(data_bytes)
+						self.decode_IMU(data_bytes)
 					elif(p_type == 4):
 						self.decode_Battery(data_bytes)
+					elif(p_type == 5):
+						self.decode_AccelMag(data_bytes)
 					else:
 						print("Unrecognized packet type {}!".format(p_type))
 
